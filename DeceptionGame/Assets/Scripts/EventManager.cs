@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EventManager : MonoBehaviour, IInteractable {
-
+public class EventManager : InteractableObject {
     [SerializeField, Tooltip("The time (in seconds) between an event starting and the event failing.")]
     private float _eventTimer = 0;
     [SerializeField, Tooltip("The time (in seconds) between an event ending and the next event starting.")]
@@ -13,7 +12,8 @@ public class EventManager : MonoBehaviour, IInteractable {
 
     public GameObject temporaryEventPopup;
 
-    private void Start() {
+    protected override void Start() {
+        base.Start();
         temporaryEventPopup.SetActive(false);
 
         // TODO: move elsewhere
@@ -22,6 +22,7 @@ public class EventManager : MonoBehaviour, IInteractable {
 
     private IEnumerator StartEvent() {
         _eventActive = true;
+        _interactable = true;
         temporaryEventPopup.SetActive(true);
 
         // Fail event after time runs out
@@ -33,8 +34,13 @@ public class EventManager : MonoBehaviour, IInteractable {
 
         StartCoroutine(EndEvent());
     }
+    
+    protected override void Repair() {
+        DoEvent();
+    }
 
-    public void Interact() {
+    protected override void Sabotage() {
+        Debug.Log("Faking event");
         DoEvent();
     }
 
@@ -48,6 +54,7 @@ public class EventManager : MonoBehaviour, IInteractable {
 
     private IEnumerator EndEvent() {
         _eventActive = false;
+        _interactable = false;
         temporaryEventPopup.SetActive(false);
         // End countdown of completed event
         StopCoroutine(currEventCountdown);
