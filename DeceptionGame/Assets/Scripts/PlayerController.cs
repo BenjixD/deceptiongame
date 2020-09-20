@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour {
         if (_closestInteractable != null) {
             InteractableObject interactable = _closestInteractable.GetComponent<InteractableObject>();
             if (interactable == null) {
-                Debug.LogWarning("Interactable object doesn't implement IInteractable");
+                Debug.LogWarning("Interactable object doesn't have InteractableObject component");
                 return;
             }
             interactable.ShowPrompts(true);

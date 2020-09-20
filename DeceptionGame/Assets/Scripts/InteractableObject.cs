@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(SphereCollider))]
 public class InteractableObject : MonoBehaviour {
     [SerializeField] protected GameObject _interactionPrompts;
     protected bool _interactable;
+    private SphereCollider _collider;     // Collider identifying interaction range
 
     protected virtual void Start() {
         ShowPrompts(false);
         _interactable = true;
+        _collider = GetComponent<SphereCollider>();
     }
 
     public void TryPickUp() {
@@ -49,8 +52,12 @@ public class InteractableObject : MonoBehaviour {
     }
     
     protected void OnInteract() {
-        // Tell nearby players to update their prompts UI
-        Collider[] nearbyPlayers = Physics.OverlapSphere(transform.position, 10f, 1 << LayerMask.NameToLayer("Player"));
+        UpdatePrompts();
+    }
+    
+    // Tells nearby players to update their prompts UI
+    private void UpdatePrompts() {
+        Collider[] nearbyPlayers = Physics.OverlapSphere(transform.position, _collider.radius, 1 << LayerMask.NameToLayer("Player"));
         foreach (Collider player in nearbyPlayers) {
             player.GetComponent<PlayerController>().UpdatePrompts();
         }
