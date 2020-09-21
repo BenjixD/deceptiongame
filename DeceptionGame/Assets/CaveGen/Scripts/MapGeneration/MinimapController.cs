@@ -14,11 +14,11 @@ public class MinimapController : MonoBehaviour
 
     private MapGenerator mapGenerator;
 
-    private GameObject mainPlayer;
+    private PlayerController mainPlayer;
 
     
 
-    public void Initialize(MapGenerator mapGenerator, GameObject mainPlayer) {
+    public void Initialize(MapGenerator mapGenerator, PlayerController mainPlayer) {
         this.mapGenerator = mapGenerator;
         this.mainPlayer = mainPlayer;
 

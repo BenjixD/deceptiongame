@@ -26,6 +26,8 @@ public class FogOfWarGenerator : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        this.fogOfWarPlane.SetActive(true); // Useful for debugging purposes
+
 		Initialize();
 	}
 	

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HideOnDistance : MonoBehaviour
 {
-    public Camera camera;
+    public Camera cam;
     public float distToHide = 5f;
 
     public SpriteRenderer rend;
@@ -12,8 +12,8 @@ public class HideOnDistance : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (camera == null) {
-            camera = Camera.main;
+        if (cam == null) {
+            cam = Camera.main;
         }
         
         this.HideMeIfTooFar();
@@ -26,7 +26,7 @@ public class HideOnDistance : MonoBehaviour
     }
 
     void HideMeIfTooFar() {
-        if (Vector3.Distance(camera.transform.position, this.transform.position) > distToHide) {
+        if (Vector3.Distance(cam.transform.position, this.transform.position) > distToHide) {
             rend.enabled = false;
         } else {
             rend.enabled = true;

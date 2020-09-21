@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
     [Header("References")]
+    public ShowOnlyIfInRange showIfInRangeScript;
     [SerializeField] private Rigidbody _rb = null;
 
     [Space]
@@ -12,6 +13,14 @@ public class PlayerController : MonoBehaviour {
     private Vector3 _moveDirection = Vector3.zero;
     [SerializeField] private float _interactionRadius = 0;
     private Collider[] _nearbyInteractables = null;
+
+    public void Initialize(bool mainPlayer) {
+        if (mainPlayer) {
+            showIfInRangeScript.Initialize(this.transform);
+        } else {
+            this.enabled = false; // TODO: Change logic to be more sophisticated
+        }
+    }
 
     private void Update() {
         // Movement

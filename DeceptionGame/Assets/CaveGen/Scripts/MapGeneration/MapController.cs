@@ -6,25 +6,34 @@ using UnityEngine;
 // A few things here can be seperated into their own scripts later
 public class MapController : MonoBehaviour
 {
+    [Header("References")]
     public MapGenerator mapGenerator;
-
-    public GameObject playerPrefab;
-    public int numPlayersToSpawn = 4;
-
-    public GameObject treePrefab;
-
-    public int treeSparseness = 1;
-
-    public bool testMouse = true;
-
-    public Transform treeParent;
 
     public MinimapController minimap;
 
-    public FogOfWarGenerator fogOfWar;
+    public FogOfWarGenerator fogOfWarGenerator;
+
+    [Header("Prefabs")]
+    public PlayerController playerPrefab;
+    public GameObject propPrefab;
+    public GameObject treePrefab;
+
+    [Header("Prefab parents")]
+
+    public Transform treeParent;
+    public Transform propParent; // Might move somewhere else later
+
+
+    [Header("Balance")]
+
+    public int numPlayersToSpawn = 4;
+
+    public int treeSparseness = 1;
 
 
     [Header("Debug")]
+    public bool testMouse = true;
+
     public float cameraDistance = 10f;
 
     public bool showDebugCubes = false;
@@ -35,7 +44,7 @@ public class MapController : MonoBehaviour
 
     private List<List<MapGenerator.Coord>> activeGreenCubes;
 
-    private GameObject mainPlayer;
+    private PlayerController mainPlayer;
 
     void Start() {
         this.Initialize();
@@ -48,12 +57,12 @@ public class MapController : MonoBehaviour
         this.CreateCubes();
         this.SpawnTrees();
         this.SpawnPlayers();
+        this.SpawnProps();
         this.minimap.Initialize(this.mapGenerator, this.mainPlayer);
     }
 
-    // Update is called once per frame
 	void Update() {
-        // Test World to map coord
+        // DEBUG ONLY: Test World to map coord
 		if (Input.GetMouseButton(0) && testMouse) {
             RaycastHit hitInfo;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -68,12 +77,12 @@ public class MapController : MonoBehaviour
             }
 		}
 
-        // Restart 
+        // DEBUG ONLY: Restart 
         if (Input.GetKeyDown(KeyCode.R)) {
             this.Initialize();
         }
 
-        // Spawn random stuff
+        // DEBUG ONLY: Spawn random stuff
         if (Input.GetKeyDown(KeyCode.T)) {
             int numCount = 5;
             int radius = 1;
@@ -97,7 +106,7 @@ public class MapController : MonoBehaviour
             }
         }
 
-        // Remove a patch of random stuff
+        // DEBUG ONLY: Remove a patch of random stuff
         if (Input.GetKeyDown(KeyCode.Y) && this.activeGreenCubes.Count > 0) {
             List<MapGenerator.Coord> selectedCube = this.activeGreenCubes[0];
             this.activeGreenCubes.RemoveAt(0);
@@ -108,6 +117,7 @@ public class MapController : MonoBehaviour
         }
 	}
 
+    // DEBUG ONLY
     private void CreateCubes() {
         if (showDebugCubes) {
             for (int x = 0; x < mapGenerator.width; x++) {
@@ -151,26 +161,40 @@ public class MapController : MonoBehaviour
 
         foreach (MapGenerator.Coord coord in playerLocations) {
             Vector3 spawnLocation = mapGenerator.CoordToWorldPoint(coord);
-            GameObject player = Instantiate(playerPrefab, spawnLocation, Quaternion.identity) as GameObject;
-            if (index == 0) {
+            PlayerController player = Instantiate(playerPrefab, spawnLocation, Quaternion.identity) as PlayerController;
+            bool isMainPlayer = index == 0;
+            player.Initialize(isMainPlayer);
+            if (isMainPlayer) {
                 this.SetMainPlayer(player);
             } else {
-                player.GetComponent<ShowOnlyIfInRange>().Initialize(this.mainPlayer.transform);
                 player.gameObject.name += " " + index;
             }
             index++;
         }
     }
 
-    private void SetMainPlayer(GameObject player) {
+    private void SpawnProps() {
+        // TODO: Set these values somewhere
+        int numCount = 20;
+        int radius = 1;
+        List<Vector3> locs = mapGenerator.GetRandomOpenLocations(numCount, radius, true); // Note: this doesn't check for duplicate locations...
+
+        foreach(Vector3 loc in locs) {
+            GameObject prop = Instantiate(propPrefab, loc, Quaternion.identity) as GameObject;
+            prop.transform.SetParent(this.propParent);
+        }
+        
+    }
+
+    private void SetMainPlayer(PlayerController player) {
         this.mainPlayer = player;
         this.mainPlayer.name = "Main player";
         Vector3 playerPos = this.mainPlayer.transform.position;
         Camera.main.transform.position = new Vector3(playerPos.x, playerPos.y + this.cameraDistance, playerPos.z - this.cameraDistance);
         Camera.main.transform.LookAt(playerPos);
         Camera.main.transform.SetParent(player.transform);
-        fogOfWar.player = player.transform;
-        fogOfWar.transform.SetParent(player.transform);
-        fogOfWar.gameObject.transform.position = new Vector3(player.transform.position.x , player.transform.position.y + 100, player.transform.position.z);
+        fogOfWarGenerator.player = player.transform;
+        fogOfWarGenerator.transform.SetParent(player.transform);
+        fogOfWarGenerator.gameObject.transform.position = new Vector3(player.transform.position.x , player.transform.position.y + 100, player.transform.position.z);
     }
 }

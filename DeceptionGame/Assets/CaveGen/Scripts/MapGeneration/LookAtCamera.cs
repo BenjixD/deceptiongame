@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LookAtCamera : MonoBehaviour
 {
-    public Camera camera;
+    public Camera cam;
     public bool doOnUpdate = true;
     public bool lookOpposite = false;
 
@@ -20,8 +20,8 @@ public class LookAtCamera : MonoBehaviour
     {
         rend = GetComponent<Renderer>();
 
-        if (camera == null) {
-            camera = Camera.main;
+        if (cam == null) {
+            cam = Camera.main;
         }
         
         this.LookAtTarget();
@@ -37,8 +37,8 @@ public class LookAtCamera : MonoBehaviour
 
     void LookAtTarget() {
         //if (!rend.isVisible) return;
-        float deltaX = this.transform.position.x - this.camera.transform.position.x;
-        float deltaY = this.transform.position.y - this.camera.transform.position.y;
+        float deltaX = this.transform.position.x - this.cam.transform.position.x;
+        float deltaY = this.transform.position.y - this.cam.transform.position.y;
         float squaredDistance = deltaX * deltaX + deltaY * deltaY;
 
         if ( squaredDistance >= maxSquaredDistance ) {
@@ -49,10 +49,10 @@ public class LookAtCamera : MonoBehaviour
 
         if (lookOpposite) {
             //transform.LookAt(2 * transform.position - camera.transform.position);
-            transform.forward = -camera.transform.forward;
+            transform.forward = -cam.transform.forward;
         } else {
             //transform.LookAt(camera.transform);
-            transform.forward = camera.transform.forward;
+            transform.forward = cam.transform.forward;
         }
     }
 }
