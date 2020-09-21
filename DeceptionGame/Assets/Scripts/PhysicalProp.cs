@@ -10,9 +10,8 @@ public class PhysicalProp : InteractableObject {
         sprite = GetComponent<SpriteRenderer>().sprite;
     }
 
-    protected override void PickUp(PlayerController player) {
+    protected override void PickUp() {
         Debug.Log("Picked up prop: " + gameObject.name);
-        player.AcquireProp(this);
         _interactable = false;
         gameObject.SetActive(false);
     }

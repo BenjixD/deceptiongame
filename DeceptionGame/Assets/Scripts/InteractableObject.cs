@@ -14,14 +14,17 @@ public class InteractableObject : MonoBehaviour {
         _collider = GetComponent<SphereCollider>();
     }
 
-    public void TryPickUp(PlayerController player) {
+    // Tries to pick up this prop and returns true iff successful
+    public bool TryPickUp() {
         if (_interactable) {
-            PickUp(player);
+            PickUp();
             OnInteract();
+            return true;
         }
+        return false;
     }
 
-    protected virtual void PickUp(PlayerController player) {
+    protected virtual void PickUp() {
 
     }
     
