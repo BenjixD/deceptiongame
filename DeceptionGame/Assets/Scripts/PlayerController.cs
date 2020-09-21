@@ -14,11 +14,13 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private float _interactionRadius = 0;
     private Collider[] _nearbyInteractables = null;
 
-    public void Initialize(bool mainPlayer) {
-        if (mainPlayer) {
-            showIfInRangeScript.Initialize(this.transform);
-        } else {
+    public void Initialize(Transform mainPlayerTransform) {
+        if (mainPlayerTransform != null) {
+            // This is NOT the main player
+            showIfInRangeScript.Initialize(mainPlayerTransform);
             this.enabled = false; // TODO: Change logic to be more sophisticated
+        } else {
+            
         }
     }
 

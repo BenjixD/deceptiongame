@@ -163,10 +163,11 @@ public class MapController : MonoBehaviour
             Vector3 spawnLocation = mapGenerator.CoordToWorldPoint(coord);
             PlayerController player = Instantiate(playerPrefab, spawnLocation, Quaternion.identity) as PlayerController;
             bool isMainPlayer = index == 0;
-            player.Initialize(isMainPlayer);
             if (isMainPlayer) {
+                player.Initialize(null);
                 this.SetMainPlayer(player);
             } else {
+                player.Initialize(this.mainPlayer.transform);
                 player.gameObject.name += " " + index;
             }
             index++;
