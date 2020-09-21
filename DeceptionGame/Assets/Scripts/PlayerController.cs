@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
     [Header("References")]
     public ShowOnlyIfInRange showIfInRangeScript;
+    public PlayerHUD playerHUD;
     [SerializeField] private Rigidbody _rb = null;
 
     [Space]
@@ -14,6 +15,7 @@ public class PlayerController : MonoBehaviour {
     // [SerializeField] private float _interactionRadius = 0;
     private List<InteractableObject> _nearbyInteractables = new List<InteractableObject>();
     private InteractableObject _closestInteractable;
+    private PhysicalProp _heldProp = null;
 
     public void Initialize(Transform mainPlayerTransform) {
         if (mainPlayerTransform != null) {
@@ -96,7 +98,7 @@ public class PlayerController : MonoBehaviour {
     // Tries to pick up closest interactable
     private void TryPickUpProp() {
         if (_closestInteractable != null) {
-            _closestInteractable.GetComponent<InteractableObject>().TryPickUp();
+            _closestInteractable.GetComponent<InteractableObject>().TryPickUp(this);
         }
     }
     
@@ -133,5 +135,19 @@ public class PlayerController : MonoBehaviour {
                 }
             }
         }
+    }
+
+    public void AcquireProp(PhysicalProp prop) {
+        if (_heldProp != null) {
+            DropProp();
+        }
+        _heldProp = prop;
+        playerHUD.SetPropImage(prop.sprite);
+    }
+
+    // Drops current prop at player's location
+    private void DropProp() {
+        _heldProp.Drop(transform.position);
+        _heldProp = null;
     }
 }

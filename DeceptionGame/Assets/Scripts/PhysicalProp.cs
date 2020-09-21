@@ -3,11 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PhysicalProp : InteractableObject {
-    protected override void PickUp() {
-        // TODO: process pickup (give to player who picked it up, etc.)
+    public Sprite sprite;
+
+    protected override void Start() {
+        base.Start();
+        sprite = GetComponent<SpriteRenderer>().sprite;
+    }
+
+    protected override void PickUp(PlayerController player) {
         Debug.Log("Picked up prop: " + gameObject.name);
+        player.AcquireProp(this);
         _interactable = false;
-        Destroy(gameObject);
+        gameObject.SetActive(false);
+    }
+
+    public void Drop(Vector3 dropLocation) {
+        transform.position = dropLocation;
+        _interactable = true;
+        gameObject.SetActive(true);
+        UpdatePrompts();
     }
     
     protected override void Sabotage() {

@@ -14,14 +14,14 @@ public class InteractableObject : MonoBehaviour {
         _collider = GetComponent<SphereCollider>();
     }
 
-    public void TryPickUp() {
+    public void TryPickUp(PlayerController player) {
         if (_interactable) {
-            PickUp();
+            PickUp(player);
             OnInteract();
         }
     }
 
-    protected virtual void PickUp() {
+    protected virtual void PickUp(PlayerController player) {
 
     }
     
@@ -56,7 +56,7 @@ public class InteractableObject : MonoBehaviour {
     }
     
     // Tells nearby players to update their prompts UI
-    private void UpdatePrompts() {
+    protected void UpdatePrompts() {
         Collider[] nearbyPlayers = Physics.OverlapSphere(transform.position, _collider.radius, 1 << LayerMask.NameToLayer("Player"));
         foreach (Collider player in nearbyPlayers) {
             player.GetComponent<PlayerController>().UpdatePrompts();

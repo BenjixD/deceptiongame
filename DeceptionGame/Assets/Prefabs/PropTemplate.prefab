@@ -98,9 +98,9 @@ GameObject:
   - component: {fileID: 4489643677760689401}
   - component: {fileID: 4489643677760689399}
   - component: {fileID: 1457191137593483763}
-  - component: {fileID: 4489643677760689398}
+  - component: {fileID: 5054042329419775879}
   m_Layer: 0
-  m_Name: Prop
+  m_Name: PropTemplate
   m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -198,7 +198,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interactionPrompts: {fileID: 659945411912212049}
---- !u!114 &4489643677760689398
+  sprite: {fileID: 0}
+--- !u!114 &5054042329419775879
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -207,9 +208,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 4489643677760689397}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b61034b737b47234d974b1ed19e626a8, type: 3}
+  m_Script: {fileID: 11500000, guid: 757f9ee49241696478b6721b3adfe774, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 0}
+  doOnUpdate: 1
+  lookOpposite: 0
+  maxSquaredDistance: 1000
 --- !u!1001 &148568623288762304
 PrefabInstance:
   m_ObjectHideFlags: 0
