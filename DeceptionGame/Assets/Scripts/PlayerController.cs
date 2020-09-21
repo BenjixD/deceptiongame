@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
     [Header("References")]
+    public ShowOnlyIfInRange showIfInRangeScript;
     [SerializeField] private Rigidbody _rb = null;
 
     [Space]
@@ -13,6 +14,16 @@ public class PlayerController : MonoBehaviour {
     // [SerializeField] private float _interactionRadius = 0;
     private List<InteractableObject> _nearbyInteractables = new List<InteractableObject>();
     private InteractableObject _closestInteractable;
+
+    public void Initialize(Transform mainPlayerTransform) {
+        if (mainPlayerTransform != null) {
+            // This is NOT the main player
+            showIfInRangeScript.Initialize(mainPlayerTransform);
+            this.enabled = false; // TODO: Change logic to be more sophisticated
+        } else {
+            
+        }
+    }
 
     private void Update() {
         // Movement
