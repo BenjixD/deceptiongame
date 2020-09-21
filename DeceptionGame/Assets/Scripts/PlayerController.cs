@@ -100,7 +100,10 @@ public class PlayerController : MonoBehaviour {
     // Tries to pick up closest interactable
     private void TryPickUpProp() {
         if (_closestInteractable != null) {
-            _closestInteractable.GetComponent<InteractableObject>().TryPickUp(this);
+            PhysicalProp prop = _closestInteractable.GetComponent<PhysicalProp>();
+            if (prop.TryPickUp()) {
+                AcquireProp(prop);
+            }
         }
     }
     
