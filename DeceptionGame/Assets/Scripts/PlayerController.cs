@@ -11,8 +11,9 @@ public class PlayerController : MonoBehaviour {
 
     [SerializeField] private float _moveSpeed = 0;
     private Vector3 _moveDirection = Vector3.zero;
-    [SerializeField] private float _interactionRadius = 0;
-    private Collider[] _nearbyInteractables = null;
+    // [SerializeField] private float _interactionRadius = 0;
+    private List<InteractableObject> _nearbyInteractables = new List<InteractableObject>();
+    private InteractableObject _closestInteractable;
 
     public void Initialize(Transform mainPlayerTransform) {
         if (mainPlayerTransform != null) {
@@ -32,10 +33,10 @@ public class PlayerController : MonoBehaviour {
 
         if (Input.GetButtonDown("PickUp")) {
             TryPickUpProp();
-        }
-        
-        if (Input.GetButtonDown("Repair")) {
-            TryDoEvent();
+        } else if (Input.GetButtonDown("Repair")) {
+            TryRepair();
+        } else if (Input.GetButtonDown("Sabotage")) {
+            TrySabotage();
         }
     }
 
@@ -43,52 +44,94 @@ public class PlayerController : MonoBehaviour {
         _rb.velocity = _moveDirection * _moveSpeed;
     }
 
-    // Tries to pick up nearest prop that's in range
-    private void TryPickUpProp() {
-        _nearbyInteractables = Physics.OverlapSphere(transform.position, _interactionRadius, 1 << LayerMask.NameToLayer("Prop"));
-        TryInteract();
-    }
-    
-    private void TryDoEvent() {
-        _nearbyInteractables = Physics.OverlapSphere(transform.position, _interactionRadius, 1 << LayerMask.NameToLayer("Event"));
-        TryInteract();
+    private void OnTriggerEnter(Collider other) {
+        if (other.CompareTag("Interactable")) {
+            _nearbyInteractables.Add(other.GetComponent<InteractableObject>());
+            UpdatePrompts();
+        }
     }
 
-    private void TryInteract() {
-        Transform interactableTransform = GetClosestInteractable();
-        if (interactableTransform != null) {
-            IInteractable interactable = interactableTransform.GetComponent<IInteractable>();
+    private void OnTriggerExit(Collider other) {
+        if (other.CompareTag("Interactable")) {
+            InteractableObject interactable = other.GetComponent<InteractableObject>();
+            if (_nearbyInteractables.Contains(interactable)) {
+                HidePrompts();
+                _nearbyInteractables.Remove(interactable);
+                UpdatePrompts();
+            }
+        }
+    }
+
+    public void UpdatePrompts() {
+        HidePrompts();
+        CleanNearbyInteractables();
+        UpdateClosestInteractable();
+        if (_closestInteractable != null) {
+            InteractableObject interactable = _closestInteractable.GetComponent<InteractableObject>();
             if (interactable == null) {
-                Debug.LogWarning("Interactable object doesn't implement IInteractable");
+                Debug.LogWarning("Interactable object doesn't have InteractableObject component");
                 return;
             }
-            interactable.Interact();
+            interactable.ShowPrompts(true);
         }
     }
 
-    private Transform GetClosestInteractable() {
-        if (_nearbyInteractables.Length == 0) {
-            return null;
-        }
-        if (_nearbyInteractables.Length == 1) {
-            return _nearbyInteractables[0].transform;
-        }
-        Collider closestInteractable = _nearbyInteractables[0];
-        float shortestDistance = Vector2.Distance(transform.position, closestInteractable.transform.position);
-        float currDistance = 0;
-        for (int i = 1; i < _nearbyInteractables.Length; i++) {
-            currDistance = Vector2.Distance(transform.position, _nearbyInteractables[i].transform.position);
-            if (currDistance < shortestDistance) {
-                closestInteractable = _nearbyInteractables[i];
-                shortestDistance = currDistance;
+    // Hide the prompts of all nearby objects
+    private void HidePrompts() {
+        foreach (InteractableObject interactable in _nearbyInteractables) {
+            if (interactable != null) {
+                interactable.ShowPrompts(false);
             }
         }
-        return closestInteractable.transform;
+    }
+
+    private void CleanNearbyInteractables() {
+        for (int i = _nearbyInteractables.Count - 1; i >= 0; i--) {
+            if (_nearbyInteractables[i] == null) {
+                _nearbyInteractables.Remove(_nearbyInteractables[i]);
+            }
+        }
+    }
+
+    // Tries to pick up closest interactable
+    private void TryPickUpProp() {
+        if (_closestInteractable != null) {
+            _closestInteractable.GetComponent<InteractableObject>().TryPickUp();
+        }
     }
     
-    private void OnDrawGizmosSelected() {
-        // Draw interaction range in editor
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, _interactionRadius);
+    private void TryRepair() {
+        if (_closestInteractable != null) {
+            _closestInteractable.GetComponent<InteractableObject>().TryRepair();
+        }
+    }
+
+    private void TrySabotage() {
+        if (_closestInteractable != null) {
+            _closestInteractable.GetComponent<InteractableObject>().TrySabotage();
+        }
+    }
+
+    private void UpdateClosestInteractable() {
+        if (_nearbyInteractables.Count == 0) {
+            _closestInteractable = null;
+            return;
+        }
+        if (_nearbyInteractables.Count == 1 && _nearbyInteractables[0].IsInteractable()) {
+            _closestInteractable = _nearbyInteractables[0];
+            return;
+        }
+        _closestInteractable = null;
+        float shortestDistance = 0;
+        float currDistance = 0;
+        for (int i = 0; i < _nearbyInteractables.Count; i++) {
+            if (_nearbyInteractables[i].IsInteractable()) {
+                currDistance = Vector2.Distance(transform.position, _nearbyInteractables[i].transform.position);
+                if (currDistance < shortestDistance || _closestInteractable == null) {
+                    _closestInteractable = _nearbyInteractables[i];
+                    shortestDistance = currDistance;
+                }
+            }
+        }
     }
 }
