@@ -99,6 +99,7 @@ GameObject:
   - component: {fileID: 4489643677760689399}
   - component: {fileID: 1457191137593483763}
   - component: {fileID: 4489643677760689398}
+  - component: {fileID: 1729414968}
   m_Layer: 0
   m_Name: Prop
   m_TagString: Interactable
@@ -210,6 +211,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b61034b737b47234d974b1ed19e626a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1729414968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4489643677760689397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2d4141156927c944b5837715f241522, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showRangeSquared: 200
+  drawDebugLine: 0
+  removeFromMinimapOnLostVision: 0
+  minimapSprite: {fileID: 21300000, guid: b890d1f320ad3a1459e2b59199d2d4f8, type: 3}
 --- !u!1001 &148568623288762304
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -46,10 +46,7 @@ public class MapController : MonoBehaviour
 
     private PlayerController mainPlayer;
 
-    void Start() {
-        this.Initialize();
-    }
-
+  
     public void Initialize() {
         this.debugCubes = new GameObject[mapGenerator.width, mapGenerator.height];
         this.activeGreenCubes = new List<List<MapGenerator.Coord>>();
@@ -164,10 +161,10 @@ public class MapController : MonoBehaviour
             PlayerController player = Instantiate(playerPrefab, spawnLocation, Quaternion.identity) as PlayerController;
             bool isMainPlayer = index == 0;
             if (isMainPlayer) {
-                player.Initialize(null);
+                player.Initialize();
                 this.SetMainPlayer(player);
             } else {
-                player.Initialize(this.mainPlayer.transform);
+                player.Initialize();
                 player.gameObject.name += " " + index;
             }
             index++;
@@ -197,5 +194,6 @@ public class MapController : MonoBehaviour
         fogOfWarGenerator.player = player.transform;
         fogOfWarGenerator.transform.SetParent(player.transform);
         fogOfWarGenerator.gameObject.transform.position = new Vector3(player.transform.position.x , player.transform.position.y + 100, player.transform.position.z);
+        GameManager.Instance.controller.mainPlayer = this.mainPlayer; // TODO: Organize this
     }
 }

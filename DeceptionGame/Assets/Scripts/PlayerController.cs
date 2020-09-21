@@ -15,13 +15,9 @@ public class PlayerController : MonoBehaviour {
     private List<InteractableObject> _nearbyInteractables = new List<InteractableObject>();
     private InteractableObject _closestInteractable;
 
-    public void Initialize(Transform mainPlayerTransform) {
-        if (mainPlayerTransform != null) {
-            // This is NOT the main player
-            showIfInRangeScript.Initialize(mainPlayerTransform);
+    public void Initialize() {
+        if (GameManager.Instance.controller.mainPlayer != null && this.transform != GameManager.Instance.controller.mainPlayer) {
             this.enabled = false; // TODO: Change logic to be more sophisticated
-        } else {
-            
         }
     }
 

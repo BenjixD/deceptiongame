@@ -7,7 +7,7 @@ using UnityEngine;
 public class FogOfWarGenerator : MonoBehaviour {
 	
 	public GameObject fogOfWarPlane;
-	public Transform player;
+	public Transform player{get; set;}
 	public LayerMask fogLayer;
 	public float radius = 5f;
 
