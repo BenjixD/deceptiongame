@@ -13,7 +13,9 @@ GameObject:
   - component: {fileID: 5265649119015983846}
   - component: {fileID: 5265649119015983843}
   - component: {fileID: 5265649119015983847}
+  - component: {fileID: 3623165913023266953}
   - component: {fileID: 5265649119015983842}
+  - component: {fileID: 1126148787}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -127,9 +129,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c2610609ac0ac445bbc13d80c54063e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _interactionRadius: 1
+--- !u!114 &3623165913023266953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5265649119015983864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d937baecf1f441fdb6eb63645d39b34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _rb: {fileID: 5265649119015983846}
   _moveSpeed: 10
-  _interactionRadius: 1
 --- !u!114 &5265649119015983842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,3 +156,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b61034b737b47234d974b1ed19e626a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1126148787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5265649119015983864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -36112512, guid: 5b00bf8b25851d440940a40ec23344f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sceneGuid: 
+  _serializerGuid: a854cf8d-3e68-4648-8849-b5ea4e56a476
+  _prefabId: 1
+  _updateRate: 1
+  _autoFreezeProxyFrames: 0
+  _clientPredicted: 1
+  _allowInstantiateOnClient: 1
+  _persistThroughSceneLoads: 0
+  _sceneObjectDestroyOnDetach: 1
+  _sceneObjectAutoAttach: 1
+  _alwaysProxy: 0
+  _detachOnDisable: 1
+  _allowFirstReplicationWhenFrozen: 0
+  _autoRemoveChildEntities: 0
+  _entityBehaviourQueryOption: 0
+  _entityPriorityCalculatorQueryOption: 1
+  _entityReplicationFilterQueryOption: 1

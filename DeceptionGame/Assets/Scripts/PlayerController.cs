@@ -3,22 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
-    [Header("References")]
-    [SerializeField] private Rigidbody _rb = null;
-
-    [Space]
-
-    [SerializeField] private float _moveSpeed = 0;
-    private Vector3 _moveDirection = Vector3.zero;
     [SerializeField] private float _interactionRadius = 0;
     private Collider[] _nearbyInteractables = null;
 
     private void Update() {
-        // Movement
-        _moveDirection.x = Input.GetAxisRaw("Horizontal");
-        _moveDirection.z = Input.GetAxisRaw("Vertical");
-        _moveDirection.Normalize();
-
         if (Input.GetButtonDown("PickUp")) {
             TryPickUpProp();
         }
@@ -26,10 +14,6 @@ public class PlayerController : MonoBehaviour {
         if (Input.GetButtonDown("Repair")) {
             TryDoEvent();
         }
-    }
-
-    private void FixedUpdate() {
-        _rb.velocity = _moveDirection * _moveSpeed;
     }
 
     // Tries to pick up nearest prop that's in range
