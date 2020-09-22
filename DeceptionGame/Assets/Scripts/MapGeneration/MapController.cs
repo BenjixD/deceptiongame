@@ -18,10 +18,14 @@ public class MapController : MonoBehaviour
     public GameObject propPrefab;
     public GameObject treePrefab;
 
+    public PingAlertObject pingAlertPrefab;
+
     [Header("Prefab parents")]
 
     public Transform treeParent;
     public Transform propParent; // Might move somewhere else later
+
+
 
 
     [Header("Balance")]
@@ -32,7 +36,6 @@ public class MapController : MonoBehaviour
 
 
     [Header("Debug")]
-    public bool testMouse = true;
 
     public float cameraDistance = 10f;
 
@@ -59,18 +62,13 @@ public class MapController : MonoBehaviour
     }
 
 	void Update() {
-        // DEBUG ONLY: Test World to map coord
-		if (Input.GetMouseButton(0) && testMouse) {
+		if (Input.GetMouseButton(0)) {
             RaycastHit hitInfo;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hitInfo)) {
                 MapGenerator.Coord nearestPoint = mapGenerator.NearestWorldPointToCoord(hitInfo.point);
-                MapTileType tile = mapGenerator.GetMapCoord(nearestPoint);
-
-                if (tile != MapTileType.OUT_OF_BOUNDS) {
-                    this.debugCubes[nearestPoint.tileX, nearestPoint.tileY].GetComponent<MeshRenderer>().material.color = Color.red;
-                }
-
+                Vector3 coordPosition = mapGenerator.CoordToWorldPoint(nearestPoint);
+                PingAlertObject pingAlertObject = Instantiate<PingAlertObject>(pingAlertPrefab, coordPosition, Quaternion.identity);
             }
 		}
 

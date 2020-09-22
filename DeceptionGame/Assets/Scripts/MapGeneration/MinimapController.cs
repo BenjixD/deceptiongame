@@ -7,12 +7,14 @@ public struct MinimapMarkerParams {
     public Sprite sprite;
     public Transform transform;
     public int hashCode;
+    public bool showOverFogOfWar;
     // TODO: Add size 
 
-    public MinimapMarkerParams(Sprite sprite, Transform transform, int hashCode) {
+    public MinimapMarkerParams(Sprite sprite, Transform transform, int hashCode, bool showOverFogOfWar = false) {
         this.sprite = sprite;
         this.transform = transform;
         this.hashCode = hashCode;
+        this.showOverFogOfWar = showOverFogOfWar;
         this.markerObject = null;
     }
 
@@ -28,8 +30,11 @@ public class MinimapController : MonoBehaviour
     public float forwardOffset = 1f;
 
     public Transform markerParent;
+    public Transform markerSeeThroughParent;
 
     public Image spritePrefab;
+
+
 
     private Dictionary<int, MinimapMarkerParams> minimapMarkers = new Dictionary<int, MinimapMarkerParams>();
 
@@ -61,8 +66,14 @@ public class MinimapController : MonoBehaviour
     }
 
     public void AddToMinimap(MinimapMarkerParams minimapParams) {
-        Image newMarker = Instantiate<Image>(spritePrefab, markerParent);
+
+        Image newMarker = Instantiate<Image>(this.spritePrefab, markerParent);
+        if (minimapParams.showOverFogOfWar) {
+            newMarker.transform.SetParent(markerSeeThroughParent);
+        }
+
         newMarker.sprite = minimapParams.sprite;
+
         minimapParams.markerObject = newMarker;
         this.minimapMarkers.Add(minimapParams.hashCode, minimapParams);
     }
