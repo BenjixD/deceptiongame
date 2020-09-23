@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour {
 
     [Header("Controllers")]
     public PlayerMovementController mvController;
+    public AnimationController animController;
 
     [Space]
 
@@ -20,6 +21,7 @@ public class PlayerController : MonoBehaviour {
     private List<InteractableObject> _nearbyInteractables = new List<InteractableObject>();
     private InteractableObject _closestInteractable;
     private PhysicalProp _heldProp = null;
+    private bool _animLocked;
 
     public void Initialize(Transform mainPlayerTransform) {
         if (mainPlayerTransform != null) {
@@ -39,12 +41,39 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void Update() {
-        if (Input.GetButtonDown("PickUp")) {
-            TryPickUpProp();
-        } else if (Input.GetButtonDown("Repair")) {
-            TryRepair();
-        } else if (Input.GetButtonDown("Sabotage")) {
-            TrySabotage();
+        if (IsControllable()) {
+            if (Input.GetButtonDown("PickUp")) {
+                TryPickUpProp();
+            } else if (Input.GetButtonDown("Repair")) {
+                TryRepair();
+            } else if (Input.GetButtonDown("Sabotage")) {
+                TrySabotage();
+            }
+        }
+        UpdateAnims();
+    }
+
+    public void UpdateAnims() {
+        if (mvController.moveDirection == Vector3.zero) {
+            // Idle anims
+            if (animController.TrackIsPlayingAnim(0, "walking")) {
+                animController.SetAnimation(0, "idle", true);
+                if (_heldProp == null) {
+                    animController.SetAnimation(1, "layered arm idle", true);
+                } else {
+                    animController.SetAnimation(1, "layered holding idle", true);
+                }
+            }
+        } else {
+            // Walking anims
+            if (animController.TrackIsPlayingAnim(0, "idle")) {
+                animController.SetAnimation(0, "walking", true);
+                if (_heldProp == null) {
+                    animController.SetAnimation(1, "layered arm walking", true);
+                } else {
+                    animController.SetAnimation(1, "layered holding walking", true);
+                }
+            }
         }
     }
 
@@ -102,6 +131,12 @@ public class PlayerController : MonoBehaviour {
         if (_closestInteractable != null) {
             PhysicalProp prop = _closestInteractable.GetComponent<PhysicalProp>();
             if (prop != null && prop.TryPickUp()) {
+                int track = animController.TakeFreeTrack();
+                if (track != -1) {
+                    animController.AddToTrack(track, "pick up", false, 0);
+                    animController.EndTrackAnims(track);
+                }
+                StartCoroutine(SetAnimationLock(animController.GetAnimationDuration("pick up")));
                 AcquireProp(prop);
             }
         }
@@ -154,5 +189,12 @@ public class PlayerController : MonoBehaviour {
     private void DropProp() {
         _heldProp.Drop(transform.position);
         _heldProp = null;
+    }
+
+    // Turn on animation lock for specified duration
+    private IEnumerator SetAnimationLock(float duration) {
+        _animLocked = true;
+        yield return new WaitForSeconds(duration);
+        _animLocked = false;
     }
 }

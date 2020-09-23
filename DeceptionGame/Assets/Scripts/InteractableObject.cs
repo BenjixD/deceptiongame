@@ -60,14 +60,14 @@ public class InteractableObject : MonoBehaviour {
     
     // Tells nearby players to update their prompts UI
     protected void UpdatePrompts() {
-        Collider[] nearbyPlayers = Physics.OverlapSphere(transform.position, _collider.radius, 1 << LayerMask.NameToLayer("Player"));
+        Collider[] nearbyPlayers = Physics.OverlapSphere(transform.position + _collider.center, _collider.radius, 1 << LayerMask.NameToLayer("Player"));
         foreach (Collider player in nearbyPlayers) {
             player.GetComponent<PlayerController>().UpdatePrompts();
         }
     }
     
     public void ShowPrompts(bool show) {
-        if (show) {
+        if (show && _interactable) {
             _interactionPrompts.SetActive(true);
         } else {
             _interactionPrompts.SetActive(false);

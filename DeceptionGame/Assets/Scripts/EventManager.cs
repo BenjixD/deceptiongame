@@ -24,6 +24,7 @@ public class EventManager : InteractableObject {
         _eventActive = true;
         _interactable = true;
         temporaryEventPopup.SetActive(true);
+        UpdatePrompts();
 
         // Fail event after time runs out
         yield return new WaitForSeconds(_eventTimer);
@@ -48,6 +49,7 @@ public class EventManager : InteractableObject {
         if (_eventActive) {
             // TODO: only complete after holding repair button for certain period of time
             Debug.Log("Event complete");
+            UpdatePrompts();
             StartCoroutine(EndEvent());
         }
     }
@@ -56,6 +58,7 @@ public class EventManager : InteractableObject {
         _eventActive = false;
         _interactable = false;
         temporaryEventPopup.SetActive(false);
+        UpdatePrompts();
         // End countdown of completed event
         StopCoroutine(currEventCountdown);
         
