@@ -38,14 +38,14 @@ public class MinimapController : MonoBehaviour
 
     private Dictionary<int, MinimapMarkerParams> minimapMarkers = new Dictionary<int, MinimapMarkerParams>();
 
-    private MapGenerator mapGenerator;
+    private MapController mapController;
 
     private PlayerController mainPlayer;
 
 
     // Initialize is AFTER we get our main character
-    public void Initialize(MapGenerator mapGenerator, PlayerController mainPlayer) {
-        this.mapGenerator = mapGenerator;
+    public void Initialize(MapController mapController, PlayerController mainPlayer) {
+        this.mapController = mapController;
         this.mainPlayer = mainPlayer;
 
         Mesh mesh = new Mesh();
@@ -53,8 +53,8 @@ public class MinimapController : MonoBehaviour
         minimapMeshFilter.mesh = mesh;
 
 
-		mesh.vertices = this.mapGenerator.meshGenerator.vertices.ToArray();
-		mesh.triangles = this.mapGenerator.meshGenerator.triangles.ToArray();
+		mesh.vertices = this.mapController.mapGenerator.meshGenerator.vertices.ToArray();
+		mesh.triangles = this.mapController.mapGenerator.meshGenerator.triangles.ToArray();
 		mesh.RecalculateNormals();
     }
 
@@ -90,6 +90,12 @@ public class MinimapController : MonoBehaviour
         }
         
         this.minimapMarkers.Remove(hashCode);
+    }
+
+    public void MoveToMinimapLocation(Vector3 minimapRaycastPos) {
+        Vector3 minimapToWorldPos = this.minimapMeshFilter.transform.InverseTransformPoint(minimapRaycastPos);
+        minimapToWorldPos.y = -this.mapController.mapGenerator.meshGenerator.wallHeight;
+        this.mapController.SetCameraTarget(minimapToWorldPos, null);
     }
 
     private void UpdateMarker() {

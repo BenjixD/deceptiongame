@@ -222,6 +222,10 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1013470477877446466, guid: 8437b9d413567ba48bccf1642813c6b4, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8437b9d413567ba48bccf1642813c6b4, type: 3}
 --- !u!224 &195253159 stripped
@@ -544,7 +548,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapController: {fileID: 616681721}
-  mainPlayer: {fileID: 0}
+  fogOfWarGenerator: {fileID: 808216200}
 --- !u!4 &616681720
 Transform:
   m_ObjectHideFlags: 0
@@ -1179,8 +1183,8 @@ GameObject:
   - component: {fileID: 970433154}
   - component: {fileID: 970433157}
   m_Layer: 12
-  m_Name: FoWPlane
-  m_TagString: Untagged
+  m_Name: MinimapFoWPlane
+  m_TagString: Minimap
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1510,10 +1514,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   renderers:
   - {fileID: 1302217629}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 598607110}
+  - {fileID: 1667765596}
+  - {fileID: 1659493485}
+  - {fileID: 797957127}
 --- !u!1 &1306690492
 GameObject:
   m_ObjectHideFlags: 0
@@ -1796,7 +1800,7 @@ GameObject:
   - component: {fileID: 1645618275}
   m_Layer: 0
   m_Name: MinimapMesh
-  m_TagString: Untagged
+  m_TagString: Minimap
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2315,7 +2319,7 @@ GameObject:
   - component: {fileID: 2041557580}
   m_Layer: 0
   m_Name: MapPlane
-  m_TagString: Untagged
+  m_TagString: Minimap
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

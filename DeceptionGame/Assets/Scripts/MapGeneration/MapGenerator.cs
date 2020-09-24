@@ -40,7 +40,14 @@ public class MapGenerator : MonoBehaviour {
 	}
 
     public Coord NearestWorldPointToCoord(Vector3 loc) {
-        return new Coord(Mathf.FloorToInt(loc.x) + width/2, Mathf.FloorToInt(loc.z) + height/2 ) ;
+        Coord coord = new Coord(Mathf.FloorToInt(loc.x) + width/2, Mathf.FloorToInt(loc.z) + height/2 ) ;
+
+        if (!IsInMapRange(coord.tileX, coord.tileY)) {
+            coord.tileX = -1;
+            coord.tileY = -1;
+        }
+
+        return coord;
     }
 
     public MapTileType[,] GetMap() {

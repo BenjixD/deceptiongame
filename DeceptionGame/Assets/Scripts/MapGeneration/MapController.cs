@@ -43,13 +43,14 @@ public class MapController : MonoBehaviour
     public Transform cubeParent;
 
 
-    private GameObject[,] debugCubes;
+    public GameObject[,] debugCubes{get; set;}
 
     private List<List<MapGenerator.Coord>> activeGreenCubes;
 
     private PlayerController mainPlayer;
 
-  
+    private string lastHitObjectTag = "";
+
     public void Initialize() {
         this.debugCubes = new GameObject[mapGenerator.width, mapGenerator.height];
         this.activeGreenCubes = new List<List<MapGenerator.Coord>>();
@@ -58,7 +59,14 @@ public class MapController : MonoBehaviour
         this.SpawnTrees();
         this.SpawnPlayers();
         this.SpawnProps();
-        this.minimap.Initialize(this.mapGenerator, this.mainPlayer);
+        this.minimap.Initialize(this, this.mainPlayer);
+        this.fogOfWarGenerator.Initialize(this);
+    }
+
+    public void SetCameraTarget(Vector3 target, Transform parent) {
+        Camera.main.transform.position = new Vector3(target.x, target.y + this.cameraDistance, target.z - this.cameraDistance);
+        Camera.main.transform.LookAt(target);
+        Camera.main.transform.SetParent(parent);
     }
 
 	void Update() {
@@ -66,11 +74,29 @@ public class MapController : MonoBehaviour
             RaycastHit hitInfo;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hitInfo)) {
-                MapGenerator.Coord nearestPoint = mapGenerator.NearestWorldPointToCoord(hitInfo.point);
-                Vector3 coordPosition = mapGenerator.CoordToWorldPoint(nearestPoint);
-                PingAlertObject pingAlertObject = Instantiate<PingAlertObject>(pingAlertPrefab, coordPosition, Quaternion.identity);
+                if (hitInfo.transform.tag == "Minimap") {
+                    // Minimap click
+                    this.minimap.MoveToMinimapLocation(hitInfo.point);
+                } else {
+                    // Ping
+                    MapGenerator.Coord nearestPoint = mapGenerator.NearestWorldPointToCoord(hitInfo.point);
+                    if (nearestPoint.tileX != -1) {
+                        Vector3 coordPosition = mapGenerator.CoordToWorldPoint(nearestPoint);
+                        PingAlertObject pingAlertObject = Instantiate<PingAlertObject>(pingAlertPrefab, coordPosition, Quaternion.identity);
+                    }
+                }
+
+                this.lastHitObjectTag = hitInfo.transform.tag;
             }
 		}
+
+        if (Input.GetMouseButtonUp(0)) {
+            if (this.lastHitObjectTag == "Minimap") {
+                this.SetCameraTarget(this.mainPlayer.transform.position, this.mainPlayer.transform);
+            }
+            
+            this.lastHitObjectTag = "";
+        }
 
         // DEBUG ONLY: Restart 
         if (Input.GetKeyDown(KeyCode.R)) {
@@ -186,12 +212,12 @@ public class MapController : MonoBehaviour
         this.mainPlayer = player;
         this.mainPlayer.name = "Main player";
         Vector3 playerPos = this.mainPlayer.transform.position;
-        Camera.main.transform.position = new Vector3(playerPos.x, playerPos.y + this.cameraDistance, playerPos.z - this.cameraDistance);
-        Camera.main.transform.LookAt(playerPos);
-        Camera.main.transform.SetParent(player.transform);
+        this.SetCameraTarget(player.transform.position, player.transform);
+
         fogOfWarGenerator.player = player.transform;
         fogOfWarGenerator.transform.SetParent(player.transform);
         fogOfWarGenerator.gameObject.transform.position = new Vector3(player.transform.position.x , player.transform.position.y + 100, player.transform.position.z);
         GameManager.Instance.controller.mainPlayer = this.mainPlayer; // TODO: Organize this
     }
+
 }

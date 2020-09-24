@@ -6,7 +6,8 @@ public class GameController : MonoBehaviour
 {
 
     public MapController mapController;
-    public PlayerController mainPlayer;
+    public FogOfWarGenerator fogOfWarGenerator;
+    public PlayerController mainPlayer{get; set;}
 
     // Start is called before the first frame update
     void Awake()

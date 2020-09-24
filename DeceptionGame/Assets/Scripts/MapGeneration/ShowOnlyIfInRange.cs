@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class ShowOnlyIfInRange : MonoBehaviour
 {
-    public float showRangeSquared = 200; // TODO: This should be a universal value in PlayerController or somewhere
-    public bool drawDebugLine = false;
-
     private Transform target;
 
     private Transform[] allChildren;
@@ -35,7 +32,7 @@ public class ShowOnlyIfInRange : MonoBehaviour
             return;
         }
 
-        if (isWithinDistance()) {
+        if (GameManager.Instance.controller.fogOfWarGenerator.IsObjectVisible(this.transform.position)) {
             this.OnGainVision();
             this.OnVisible();
         }
@@ -45,14 +42,8 @@ public class ShowOnlyIfInRange : MonoBehaviour
     void Update()
     {
         if (target) {
-            if (drawDebugLine) {
-                Vector3 from = transform.position;
-                Vector3 to = transform.position + Vector3.right * Mathf.Sqrt(showRangeSquared);
-                Debug.DrawLine(from, to, Color.yellow);
-            }
-
-            bool withinDistance = this.isWithinDistance();
-
+            bool withinDistance = GameManager.Instance.controller.fogOfWarGenerator.IsObjectVisible(this.transform.position); // TODO: Should use Bounds instead of just raw position
+            
             if (withinDistance) {
                 if (isInvisible) {
                     this.OnGainVision();
@@ -70,15 +61,6 @@ public class ShowOnlyIfInRange : MonoBehaviour
             }
 
         }
-    }
-
-    protected bool isWithinDistance() {
-        float deltaX = target.transform.position.x - this.transform.position.x;
-        float deltaZ = target.transform.position.z - this.transform.position.z;
-
-        float distSquared = deltaX * deltaX + deltaZ * deltaZ;
-
-        return distSquared <= this.showRangeSquared;
     }
 
     // Override me to do cool stuff!
