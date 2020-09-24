@@ -62,7 +62,7 @@ public class MapController : MonoBehaviour
     }
 
 	void Update() {
-		if (Input.GetMouseButton(0)) {
+		if (Input.GetMouseButtonDown(0)) {
             RaycastHit hitInfo;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hitInfo)) {

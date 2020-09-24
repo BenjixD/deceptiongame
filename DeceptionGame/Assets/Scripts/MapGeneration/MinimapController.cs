@@ -58,7 +58,6 @@ public class MinimapController : MonoBehaviour
 		mesh.RecalculateNormals();
     }
 
-
     // Update is called once per frame
     void Update()
     {
@@ -73,8 +72,9 @@ public class MinimapController : MonoBehaviour
         }
 
         newMarker.sprite = minimapParams.sprite;
-
         minimapParams.markerObject = newMarker;
+        this.PositionOnMinimap(minimapParams);
+
         this.minimapMarkers.Add(minimapParams.hashCode, minimapParams);
     }
 
@@ -90,14 +90,9 @@ public class MinimapController : MonoBehaviour
         }
         
         this.minimapMarkers.Remove(hashCode);
-
-
     }
 
     private void UpdateMarker() {
-        //Vector3 transformedPoint = minimapMeshFilter.transform.TransformPoint(mainPlayer.transform.position + Vector3.up * forwardOffset);
-        //this.marker.transform.position = transformedPoint;
-
         List<int> markersToDestroy = new List<int>();
 
         foreach (KeyValuePair<int, MinimapMarkerParams> markers in this.minimapMarkers) {
@@ -109,13 +104,17 @@ public class MinimapController : MonoBehaviour
                 continue;
             }
 
-            Vector3 transformedPoint = minimapMeshFilter.transform.TransformPoint(minimapParams.transform.position + Vector3.up * forwardOffset);
-            minimapParams.markerObject.transform.position = transformedPoint;
+            this.PositionOnMinimap(minimapParams);
         }
 
         foreach (int item in markersToDestroy) {
             Destroy(this.minimapMarkers[item].markerObject.gameObject);
             this.minimapMarkers.Remove(item);
         }
+    }
+
+    private void PositionOnMinimap(MinimapMarkerParams minimapParams) {
+        Vector3 transformedPoint = minimapMeshFilter.transform.TransformPoint(minimapParams.transform.position + Vector3.up * forwardOffset);
+        minimapParams.markerObject.transform.position = transformedPoint;
     }
 }
