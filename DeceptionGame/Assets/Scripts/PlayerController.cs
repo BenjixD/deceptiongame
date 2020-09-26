@@ -2,9 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum PlayerHorizontalDirection {
+    DEFAULT,
+    LEFT,
+    RIGHT
+};
+
+public enum PlayerVerticalDirection {
+    DEFAULT,
+    UP,
+    DOWN
+}
+
 public class PlayerController : MonoBehaviour {
     [Header("References")]
     public ShowOnlyIfInRange showIfInRangeScript;
+    public PlayerCardController cardController;
+
+    public Transform throwLocation; // Might want to be its own class later on like in Mooks if we have too many...
+
     [SerializeField] private Rigidbody _rb = null;
 
     [Space]
@@ -15,17 +32,44 @@ public class PlayerController : MonoBehaviour {
     private List<InteractableObject> _nearbyInteractables = new List<InteractableObject>();
     private InteractableObject _closestInteractable;
 
+    
+    // TODO: Move this in PlayerInputController
+
+    protected PlayerHorizontalDirection playerHorizontalDirection = PlayerHorizontalDirection.DEFAULT;
+    protected PlayerVerticalDirection playerVerticalDirection = PlayerVerticalDirection.DEFAULT;
+
+
     public void Initialize() {
         if (GameManager.Instance.controller.mainPlayer != null && this.transform != GameManager.Instance.controller.mainPlayer) {
             this.enabled = false; // TODO: Change logic to be more sophisticated
         }
+
+        this.cardController.Initialize(this);
+
+        // tmp
+        this.cardController.AddCardToHand(this.cardController.DrawRandomCard());
     }
 
     private void Update() {
         // Movement
-        _moveDirection.x = Input.GetAxisRaw("Horizontal");
-        _moveDirection.z = Input.GetAxisRaw("Vertical");
+        float inputX = Input.GetAxisRaw("Horizontal");
+        float inputY = Input.GetAxisRaw("Vertical");
+
+        _moveDirection.x = inputX;
+        _moveDirection.z = inputY;
         _moveDirection.Normalize();
+
+        if (inputX == 0) {
+            this.playerHorizontalDirection = PlayerHorizontalDirection.DEFAULT;
+        } else {
+            this.playerHorizontalDirection = inputX >= 0 ? PlayerHorizontalDirection.RIGHT : PlayerHorizontalDirection.LEFT;
+        }
+
+        if (inputY == 0) {
+            this.playerVerticalDirection = PlayerVerticalDirection.DEFAULT;
+        } else {
+            this.playerVerticalDirection = inputY >= 0 ? PlayerVerticalDirection.UP : PlayerVerticalDirection.DOWN;
+        }
 
         if (Input.GetButtonDown("PickUp")) {
             TryPickUpProp();
@@ -33,6 +77,12 @@ public class PlayerController : MonoBehaviour {
             TryRepair();
         } else if (Input.GetButtonDown("Sabotage")) {
             TrySabotage();
+        }
+
+        this.cardController.UpdateActiveCards();
+
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            this.cardController.PlayCardInHand(0);
         }
     }
 
@@ -71,6 +121,15 @@ public class PlayerController : MonoBehaviour {
             interactable.ShowPrompts(true);
         }
     }
+
+    public PlayerHorizontalDirection GetHorizontalDirection() {
+        return this.playerHorizontalDirection;
+    }
+
+    public PlayerVerticalDirection GetVerticalDirection() {
+        return this.playerVerticalDirection;
+    }
+
 
     // Hide the prompts of all nearby objects
     private void HidePrompts() {

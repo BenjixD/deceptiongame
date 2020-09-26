@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 // A Singleton bridge to access data from across the application
 public class GameManager : Singleton<GameManager> {
+    public DataModels models;
     public GameController controller {get; set;}
     void Awake() {
         if (FindObjectsOfType<GameManager>().Length >= 2) {

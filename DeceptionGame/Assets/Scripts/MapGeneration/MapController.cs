@@ -55,7 +55,7 @@ public class MapController : MonoBehaviour
         this.debugCubes = new GameObject[mapGenerator.width, mapGenerator.height];
         this.activeGreenCubes = new List<List<MapGenerator.Coord>>();
         this.mapGenerator.GenerateMap();
-        this.CreateCubes();
+        this.CreateCubes(); // debug
         this.SpawnTrees();
         this.SpawnPlayers();
         this.SpawnProps();
