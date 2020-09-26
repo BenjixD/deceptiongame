@@ -35,7 +35,6 @@ public class MinimapController : MonoBehaviour
     public Image spritePrefab;
 
 
-
     private Dictionary<int, MinimapMarkerParams> minimapMarkers = new Dictionary<int, MinimapMarkerParams>();
 
     private MapController mapController;
