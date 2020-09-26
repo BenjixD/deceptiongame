@@ -96,6 +96,7 @@ GameObject:
   - component: {fileID: 639585649983949254}
   - component: {fileID: 8728841446385156029}
   - component: {fileID: 639585649983949262}
+  - component: {fileID: 963921399}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -162,9 +163,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showIfInRangeScript: {fileID: 8728841446385156029}
-  _rb: {fileID: 480530025423308901}
+  _mvController: {fileID: 963921399}
   _moveSpeed: 10
-  _interactionRadius: 1
 --- !u!114 &8728841446385156029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,6 +193,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 5125171496889962267}
   collide: {fileID: 639585649983949263}
+--- !u!114 &963921399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 639585649800194855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d937baecf1f441fdb6eb63645d39b34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rb: {fileID: 480530025423308901}
+  _moveSpeed: 10
 --- !u!1 &5410785221058594597
 GameObject:
   m_ObjectHideFlags: 0
@@ -381,7 +395,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 757f9ee49241696478b6721b3adfe774, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera: {fileID: 0}
+  cam: {fileID: 0}
   doOnUpdate: 1
   lookOpposite: 0
   maxSquaredDistance: 1000
