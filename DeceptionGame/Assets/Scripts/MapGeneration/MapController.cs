@@ -162,15 +162,12 @@ public class MapController : MonoBehaviour
         foreach (MapGenerator.Coord coord in playerLocations) {
             Vector3 spawnLocation = mapGenerator.CoordToWorldPoint(coord);
             PlayerController player = Instantiate(playerPrefab, spawnLocation, Quaternion.identity) as PlayerController;
-            PlayerMovementController mvPlayer = player.gameObject.GetComponent<PlayerMovementController>();
             bool isMainPlayer = index == 0;
             if (isMainPlayer) {
                 player.Initialize(null);
-                mvPlayer.Initialize(null);
                 this.SetMainPlayer(player);
             } else {
                 player.Initialize(this.mainPlayer.transform);
-                mvPlayer.Initialize(this.mainPlayer.transform);
                 player.gameObject.name += " " + index;
             }
             index++;
