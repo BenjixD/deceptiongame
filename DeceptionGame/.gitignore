@@ -59,3 +59,6 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+*.vscode/
+/Assets/NetCodeGenerated/
+DeceptionGame/Assets/NetCodeGenerated/
