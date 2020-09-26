@@ -14,6 +14,7 @@ public class PhysicalProp : InteractableObject {
         Debug.Log("Picked up prop: " + gameObject.name);
         _interactable = false;
         gameObject.SetActive(false);
+        UpdatePrompts();
     }
 
     public void Drop(Vector3 dropLocation) {

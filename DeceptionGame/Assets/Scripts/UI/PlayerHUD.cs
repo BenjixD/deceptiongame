@@ -5,17 +5,20 @@ using UnityEngine.UI;
 
 public class PlayerHUD : MonoBehaviour {
     public Image propImage;
+    public GameObject dropButton;
 
     private void Start() {
-        EmptyPropImage();
+        EmptyProp();
     }
 
-    public void EmptyPropImage() {
-        propImage.enabled = false;
-    }
-
-    public void SetPropImage(Sprite image) {
+    public void PickUpProp(PhysicalProp prop) {
         propImage.enabled = true;
-        propImage.sprite = image;
+        propImage.sprite = prop.sprite;
+        dropButton.SetActive(true);
+    }
+
+    public void EmptyProp() {
+        propImage.enabled = false;
+        dropButton.SetActive(false);
     }
 }

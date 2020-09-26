@@ -58,7 +58,11 @@ public class AnimationController : MonoBehaviour {
         if (anim == null) {
             return false;
         }
-        return _animState.GetCurrent(track).Animation == anim;
+        Spine.TrackEntry trackEntry = _animState.GetCurrent(track);
+        if (trackEntry == null) {
+            return false;
+        }
+        return trackEntry.Animation == anim;
     }
 
     public void SetAnimation(int trackIndex, string animationName, bool loop) {
@@ -104,9 +108,6 @@ public class AnimationController : MonoBehaviour {
 
     public void EndTrackAnims(int trackIndex) {
         _animState.AddEmptyAnimation(trackIndex, 0.5f, 0);
-        if (trackIndex < _freeTrackIndex) {
-            _freeTrackIndex = trackIndex;
-        }
         if (trackIndex < _freeTrackIndex) {
             _freeTrackIndex = trackIndex;
         }
