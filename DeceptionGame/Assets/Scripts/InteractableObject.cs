@@ -39,7 +39,7 @@ public class InteractableObject : MonoBehaviour {
 
     }
 
-    public void TrySabotage() {
+    public virtual void TrySabotage() {
         if (_interactable) {
             Sabotage();
             OnInteract();
