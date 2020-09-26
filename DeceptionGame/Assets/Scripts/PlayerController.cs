@@ -6,7 +6,6 @@ public class PlayerController : MonoBehaviour {
     [Header("References")]
     public ShowOnlyIfInRange showIfInRangeScript;
     public PlayerHUD playerHUD;
-    [SerializeField] private Rigidbody _rb = null;
 
     [Space]
 
@@ -28,11 +27,6 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void Update() {
-        // Movement
-        _moveDirection.x = Input.GetAxisRaw("Horizontal");
-        _moveDirection.z = Input.GetAxisRaw("Vertical");
-        _moveDirection.Normalize();
-
         if (Input.GetButtonDown("PickUp")) {
             TryPickUpProp();
         } else if (Input.GetButtonDown("Repair")) {
@@ -40,10 +34,6 @@ public class PlayerController : MonoBehaviour {
         } else if (Input.GetButtonDown("Sabotage")) {
             TrySabotage();
         }
-    }
-
-    private void FixedUpdate() {
-        _rb.velocity = _moveDirection * _moveSpeed;
     }
 
     private void OnTriggerEnter(Collider other) {
