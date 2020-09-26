@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 // Controller for MapGenerator
 // A few things here can be seperated into their own scripts later
+
+
 public class MapController : MonoBehaviour
 {
     [Header("References")]
@@ -70,10 +73,11 @@ public class MapController : MonoBehaviour
     }
 
 	void Update() {
-		if (Input.GetMouseButtonDown(0)) {
+		if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject()) {
             RaycastHit hitInfo;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hitInfo)) {
+            
                 if (hitInfo.transform.tag == "Minimap") {
                     // Minimap click
                     this.minimap.MoveToMinimapLocation(hitInfo.point);

@@ -51,6 +51,10 @@ public class PlayerCardController : MonoBehaviour
     public List<Card> GetActiveCardsList() {
         return activeCardsList;
     }
+    
+    public List<Card> GetCardsInHand() {
+        return this.hand;
+    }
 
     public void AddCardToPlayList(Card card) {
         this.activeCardsList.Add(card);

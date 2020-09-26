@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ad70387ea78ef44b985c7693dfa0b84, type: 3}
   m_Name: SpawnDamageObjectCard
   m_EditorClassIdentifier: 
-  cardName: CardName
-  cardDescription: Card text
+  cardName: Damaging card
+  cardDescription: Throw a card that deals 20 damage on impact
   removeFromHandOnPlay: 0
-  velocity: {x: 20, y: 0, z: 20}
+  speed: 20
   damageObject: {fileID: 6593034446872438403, guid: 92d11a25b8fad274eb39b5b8d61faea5, type: 3}
