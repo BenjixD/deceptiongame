@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour {
             // This is NOT the main player
             showIfInRangeScript.Initialize(mainPlayerTransform);
             // Disable all Controllers
-            _mvController.enabled = false;
+            mvController.enabled = false;
             this.enabled = false; // TODO: Change logic to be more sophisticated
         } else {
             
@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour {
 
     private void GetControllerComponents() {
         // Get all Controller Components
-        _mvController = GetComponent<PlayerMovementController>();
+        mvController = GetComponent<PlayerMovementController>();
     }
 
     private void Update() {
