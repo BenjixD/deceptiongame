@@ -163,6 +163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showIfInRangeScript: {fileID: 8728841446385156029}
+  _mvController: {fileID: 963921399}
   _moveSpeed: 10
 --- !u!114 &8728841446385156029
 MonoBehaviour:

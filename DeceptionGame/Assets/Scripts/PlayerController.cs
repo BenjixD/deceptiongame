@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour {
     [Space]
 
     [Header("Controllers")]
-    [SerializeField] private PlayerMovementController _mvController;
+    public PlayerMovementController _mvController;
 
     [Space]
 
@@ -31,7 +31,8 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    private void Start() {
+    private void GetControllerComponents() {
+        // Get all Controller Components
         _mvController = GetComponent<PlayerMovementController>();
     }
 
