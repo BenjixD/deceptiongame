@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void Start() {
-        _mvController = GameObject.GetComponent<PlayerMovementController>();
+        _mvController = GetComponent<PlayerMovementController>();
     }
 
     private void Update() {
