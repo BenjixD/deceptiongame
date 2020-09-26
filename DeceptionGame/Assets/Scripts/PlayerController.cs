@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour {
     [Space]
 
     [Header("Controllers")]
-    public PlayerMovementController _mvController;
+    public PlayerMovementController mvController;
 
     [Space]
 
