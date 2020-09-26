@@ -12,6 +12,15 @@ public class PlayerMovementController : Bolt.EntityBehaviour<INetPlayerState> {
     [SerializeField] private float _moveSpeed = 0;
     private Vector3 _moveDirection = Vector3.zero;
 
+    public void Initialize(Transform mainPlayerTransform) {
+        if (mainPlayerTransform != null) {
+            // This is NOT the main player
+            this.enabled = false; // TODO: Change logic to be more sophisticated
+        } else {
+            
+        }
+    }
+
     public override void Attached()
     {
         // Update state position to be what was instantiated by Bolt
