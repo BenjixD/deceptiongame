@@ -9,6 +9,11 @@ public class PlayerController : MonoBehaviour {
 
     [Space]
 
+    [Header("Controllers")]
+    public PlayerMovementController mvController;
+
+    [Space]
+
     [SerializeField] private float _moveSpeed = 0;
     private Vector3 _moveDirection = Vector3.zero;
     // [SerializeField] private float _interactionRadius = 0;
@@ -20,10 +25,17 @@ public class PlayerController : MonoBehaviour {
         if (mainPlayerTransform != null) {
             // This is NOT the main player
             showIfInRangeScript.Initialize(mainPlayerTransform);
+            // Disable all Controllers
+            mvController.enabled = false;
             this.enabled = false; // TODO: Change logic to be more sophisticated
         } else {
             
         }
+    }
+
+    private void GetControllerComponents() {
+        // Get all Controller Components
+        mvController = GetComponent<PlayerMovementController>();
     }
 
     private void Update() {
