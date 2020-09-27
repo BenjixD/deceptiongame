@@ -8,16 +8,23 @@ public class DamageObject : MonoBehaviour
     private PlayerController owner;
     private Vector3 velocity;
 
-    private SpawnDamageObjectCard controller;
+    private Card controller;
 
-    public void Initialize(PlayerController owner, SpawnDamageObjectCard controller, Vector3 velocity) {
+    private bool removeFromPlayList;
+
+    // Controller are necessary only if you want to remove from playList after 
+    public void Initialize(Vector3 velocity, PlayerController owner, Card controller = null) {
+        this.velocity = velocity;
         this.owner = owner;
         this.controller = controller;
-        this.velocity = velocity;
+
+        if (controller != null) {
+            removeFromPlayList = true;
+        }
+
     }
 
     void Update() {
-
         this.transform.position += velocity * Time.deltaTime;
     }
 
@@ -25,7 +32,9 @@ public class DamageObject : MonoBehaviour
         if (other.tag == "Player" && other.gameObject != owner.gameObject) {
             Debug.Log("DEAL INSANE DAMAGE TO: " + other.gameObject.name + " " + damageAmount); // TODO: Add player health
         } else if (other.tag == "OutOfBounds") {
-            owner.cardController.RemoveCardFromPlayList(controller);
+            if (removeFromPlayList) {
+                owner.cardController.RemoveCardFromPlayList(controller);
+            }
             Destroy(this.gameObject);
         }
     }

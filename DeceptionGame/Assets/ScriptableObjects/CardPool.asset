@@ -15,4 +15,4 @@ MonoBehaviour:
   cardsInPool:
   - {fileID: 11400000, guid: 85fe151804fec4d43841ca3793379fac, type: 2}
   tmp_useDebugCard: 1
-  tmp_debugCard: {fileID: 11400000, guid: 85fe151804fec4d43841ca3793379fac, type: 2}
+  tmp_debugCard: {fileID: 11400000, guid: 3ed6873a943fe2b439eacfd15bfa088c, type: 2}
