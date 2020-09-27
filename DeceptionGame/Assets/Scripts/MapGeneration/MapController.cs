@@ -140,7 +140,7 @@ public class MapController : MonoBehaviour
         for (int x = 0; x < this.mapGenerator.width; x++) {
             for (int y = 0; y < this.mapGenerator.height; y ++) {
                 MapGenerator.Coord coord = new MapGenerator.Coord(x, y);
-                if (this.mapGenerator.isOpenEdgeTile(coord) || (map[x,y] == MapTileType.WALL && x % this.treeSparseness == 0)) {
+                if (this.mapGenerator.isOpenEdgeTile(coord) || (map[x,y] == MapTileType.WALL && x % this.treeSparseness == 0 && y % this.treeSparseness == 0)) {
                         Vector3 spawnLocation = this.mapGenerator.CoordToWorldPoint(coord);
                         GameObject tree = Instantiate(treePrefab, spawnLocation, Quaternion.identity) as GameObject;
                         float randScale = Random.Range(0.5f, 2f);
