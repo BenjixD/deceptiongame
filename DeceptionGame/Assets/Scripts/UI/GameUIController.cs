@@ -8,10 +8,8 @@ public class GameUIController : MonoBehaviour
     public CardUIView cardUIView;
 
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    public void Initialize() {
+        this.cardUIView.Initialize();
     }
 
     // Update is called once per frame

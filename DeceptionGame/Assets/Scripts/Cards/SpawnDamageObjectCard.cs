@@ -21,7 +21,7 @@ public class SpawnDamageObjectCard : Card
         dmgObject.transform.SetParent(parentObject);
         dmgObject.Initialize(velocity, this.player);
 
-        this.player.cardController.RemoveCardFromPlayList(this);
+        this.RemoveCardFromActiveList();
     }
 
 }

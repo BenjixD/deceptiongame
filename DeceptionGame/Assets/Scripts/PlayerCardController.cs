@@ -34,18 +34,33 @@ public class PlayerCardController : MonoBehaviour
         return GameManager.Instance.models.cardPool.GetCardFromPool();
     }
 
-    public bool AddCardToHand(Card card) {
+    public bool AddCardToHand(Card card, bool callUpdateHand = true) {
         if (this.hand.Count == maxNumCardsInHand) {
             return false;
         } else {
             card.Initialize(this.playerController);
             this.hand.Add(card);
+
+            Messenger.Broadcast(Messages.OnUpdateHand);
             return true;
         }
     }
 
+    public bool AddCardsToHand(List<Card> cards) {
+        foreach (Card card in cards) {
+            if (!AddCardToHand(card, false)) {
+                Messenger.Broadcast(Messages.OnUpdateHand);
+                return false;
+            }
+        }
+
+        Messenger.Broadcast(Messages.OnUpdateHand);
+        return true;
+    }
+
     public void RemoveCardFromHand(Card card) {
         this.hand.Remove(card);
+        Messenger.Broadcast(Messages.OnUpdateHand);
     }
 
     public List<Card> GetActiveCardsList() {

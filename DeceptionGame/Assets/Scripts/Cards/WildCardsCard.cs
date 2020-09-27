@@ -22,7 +22,7 @@ public class WildCardsCard : Card
         this.CreateDamageObject(velocity2, spawnLocation, parentObject);
         this.CreateDamageObject(velocity3, spawnLocation, parentObject);
 
-        this.player.cardController.RemoveCardFromPlayList(this);
+        this.RemoveCardFromActiveList();
     }
 
     private void CreateDamageObject(Vector3 velocity, Transform spawnLocation, Transform parentObject) {

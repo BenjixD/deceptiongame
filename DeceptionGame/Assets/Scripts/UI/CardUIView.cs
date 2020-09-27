@@ -10,21 +10,40 @@ public class CardUIView : MonoBehaviour
     private List<UICardImage> uiCardImages = new List<UICardImage>(); 
 
     private bool isShowing = false;
+
+    public void Initialize() {
+        Messenger.AddListener(Messages.OnUpdateHand, this.UpdateCards);
+    }
+
+    void OnDestroy() {
+        Messenger.RemoveListener(Messages.OnUpdateHand, this.UpdateCards);
+    }
+
     public void PressPlayCardsButton() {
         isShowing = !isShowing;
         // TODO:
         this.cardUIParent.gameObject.SetActive(isShowing);
 
         if (isShowing) {
-            PlayerController mainPlayer = GameManager.Instance.controller.mainPlayer;
-            List<Card> cards = mainPlayer.cardController.GetCardsInHand();
-            foreach (Card card in cards) {
-                UICardImage newCard = Instantiate<UICardImage>(this.cardPrefab, cardUIParent);
-                newCard.Initialize(card);
-                this.uiCardImages.Add(newCard);
-            }
+            this.UpdateCards();
         } else {
             this.DestroyCardList();
+        }
+    }
+
+    private void UpdateCards() {
+        if (isShowing) {
+            DestroyCardList();
+        } else {
+            return;
+        }
+
+        PlayerController mainPlayer = GameManager.Instance.controller.mainPlayer;
+        List<Card> cards = mainPlayer.cardController.GetCardsInHand();
+        foreach (Card card in cards) {
+            UICardImage newCard = Instantiate<UICardImage>(this.cardPrefab, cardUIParent);
+            newCard.Initialize(card);
+            this.uiCardImages.Add(newCard);
         }
     }
 

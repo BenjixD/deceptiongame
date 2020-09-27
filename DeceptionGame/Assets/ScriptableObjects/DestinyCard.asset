@@ -9,11 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ad70387ea78ef44b985c7693dfa0b84, type: 3}
-  m_Name: SpawnDamageObjectCard
+  m_Script: {fileID: 11500000, guid: d83d9209bc36ec14b8afb2f9397f9aa7, type: 3}
+  m_Name: DestinyCard
   m_EditorClassIdentifier: 
-  cardName: Damaging card
-  cardDescription: Throw a card that deals 20 damage on impact
+  cardName: Destiny
+  cardDescription: See all other players and teleport to one of them
   removeFromHandOnPlay: 1
-  speed: 20
-  damageObject: {fileID: 6593034446872438403, guid: 92d11a25b8fad274eb39b5b8d61faea5, type: 3}
+  visionTime: 3

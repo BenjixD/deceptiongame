@@ -45,9 +45,6 @@ public class PlayerController : MonoBehaviour {
         }
 
         this.cardController.Initialize(this);
-
-        // tmp
-        this.cardController.AddCardToHand(this.cardController.DrawRandomCard());
     }
 
     private void Update() {

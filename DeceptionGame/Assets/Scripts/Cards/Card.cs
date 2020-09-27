@@ -58,4 +58,8 @@ public class Card : ScriptableObject {
         return direction;
     }
 
+    protected void RemoveCardFromActiveList() {
+        this.player.cardController.RemoveCardFromPlayList(this);
+    }
+
 }

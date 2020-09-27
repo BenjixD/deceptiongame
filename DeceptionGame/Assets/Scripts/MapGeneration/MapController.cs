@@ -45,6 +45,8 @@ public class MapController : MonoBehaviour
     public bool showDebugCubes = false;
     public Transform cubeParent;
 
+    public List<PlayerController> players{get; set;} // TODO: Move this somewhere else...
+
 
     public GameObject[,] debugCubes{get; set;}
 
@@ -57,6 +59,8 @@ public class MapController : MonoBehaviour
     public void Initialize() {
         this.debugCubes = new GameObject[mapGenerator.width, mapGenerator.height];
         this.activeGreenCubes = new List<List<MapGenerator.Coord>>();
+        this.players = new List<PlayerController>();
+
         this.mapGenerator.GenerateMap();
         this.CreateCubes(); // debug
         this.SpawnTrees();
@@ -195,6 +199,8 @@ public class MapController : MonoBehaviour
                 player.Initialize();
                 player.gameObject.name += " " + index;
             }
+            
+            this.players.Add(player);
             index++;
         }
     }
@@ -219,8 +225,6 @@ public class MapController : MonoBehaviour
         this.SetCameraTarget(player.transform.position, player.transform);
 
         fogOfWarGenerator.player = player.transform;
-        fogOfWarGenerator.transform.SetParent(player.transform);
-        fogOfWarGenerator.gameObject.transform.position = new Vector3(player.transform.position.x , player.transform.position.y + 100, player.transform.position.z);
         GameManager.Instance.controller.mainPlayer = this.mainPlayer; // TODO: Organize this
     }
 

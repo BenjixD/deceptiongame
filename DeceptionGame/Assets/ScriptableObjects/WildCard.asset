@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: WildCard
   cardDescription: Throw three cards that deal 20 damage each
-  removeFromHandOnPlay: 0
+  removeFromHandOnPlay: 1
   speed: 20
   damageObject: {fileID: 6593034446872438403, guid: 92d11a25b8fad274eb39b5b8d61faea5, type: 3}

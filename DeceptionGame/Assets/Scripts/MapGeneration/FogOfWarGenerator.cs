@@ -48,10 +48,18 @@ public class FogOfWarGenerator : MonoBehaviour {
             return;
         }
 
-		Ray r = new Ray(transform.position, player.position - transform.position);
+        this.CastVisionOn(player.transform.position);
+	}
+
+    public void CastVisionOn(Vector3 position) {
+
+        // TODO: Fix bug
+        Vector3 rayOrigin = position + Vector3.up * maxDistance;
+
+		Ray r = new Ray(rayOrigin, position - rayOrigin);
 		RaycastHit hit;
 
-        Debug.DrawLine(transform.position, player.position, Color.red);
+        Debug.DrawLine(rayOrigin, position, Color.red);
 		if (Physics.Raycast(r, out hit, 1000, fogLayer, QueryTriggerInteraction.Collide)) {
 			for (int i=0; i< m_vertices.Length; i++) {
 				Vector3 v = worldPosVertices[i];
@@ -87,7 +95,7 @@ public class FogOfWarGenerator : MonoBehaviour {
 			}
 			UpdateColor();
 		}
-	}
+    }
 
 	
 	public void Initialize() {
