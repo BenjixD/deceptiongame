@@ -179,6 +179,34 @@ public class MapGenerator : MonoBehaviour {
         
 	}
 
+    public bool isOpenEdgeTile(Coord coord) {
+        if (coord.tileX <= 0 || coord.tileX >= width-1 || coord.tileY <= 0 || coord.tileY >= height-1) {
+            return true;
+        }
+
+        if (this.map[coord.tileX, coord.tileY] == MapTileType.EMPTY) {
+            return false;
+        }
+
+        if (this.IsInMapRange(coord.tileX - 1, coord.tileY) && this.map[coord.tileX - 1, coord.tileY] == MapTileType.EMPTY) {
+            return true;
+        }
+
+        if (this.IsInMapRange(coord.tileX + 1, coord.tileY) && this.map[coord.tileX + 1, coord.tileY] == MapTileType.EMPTY) {
+            return true;
+        }
+
+        if (this.IsInMapRange(coord.tileX , coord.tileY - 1) && this.map[coord.tileX, coord.tileY - 1]  == MapTileType.EMPTY) {
+            return true;
+        }
+
+        if (this.IsInMapRange(coord.tileX, coord.tileY + 1) && this.map[coord.tileX, coord.tileY + 1] == MapTileType.EMPTY) {
+            return true;
+        }
+
+        return false;
+    }
+
 
 	void ProcessMap() {
        

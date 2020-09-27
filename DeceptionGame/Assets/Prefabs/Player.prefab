@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showIfInRangeScript: {fileID: 8728841446385156029}
-  _mvController: {fileID: 963921399}
+  mvController: {fileID: 963921399}
   _moveSpeed: 10
 --- !u!114 &8728841446385156029
 MonoBehaviour:
@@ -177,8 +177,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17d961ef194db4a48b6083533b87a6af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showRangeSquared: 200
-  drawDebugLine: 1
+  showRangeSquared: 100
+  drawDebugLine: 0
 --- !u!114 &639585649983949262
 MonoBehaviour:
   m_ObjectHideFlags: 0
