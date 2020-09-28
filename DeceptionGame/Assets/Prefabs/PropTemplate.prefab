@@ -198,8 +198,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interactionPrompts: {fileID: 659945411912212049}
+  prop: {fileID: 11400000, guid: a12a1fe9815952d4b92f7279c8bee4aa, type: 2}
   sprite: {fileID: 0}
-  destroyedSprite: {fileID: 21300000, guid: 184221b72448ebf44b4c330ae71f133e, type: 3}
 --- !u!114 &5054042329419775879
 MonoBehaviour:
   m_ObjectHideFlags: 0

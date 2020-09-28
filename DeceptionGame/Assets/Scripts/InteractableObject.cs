@@ -28,25 +28,25 @@ public class InteractableObject : MonoBehaviour {
 
     }
     
-    public void TryRepair() {
+    public void TryRepair(PlayerController player) {
         if (_interactable) {
-            Repair();
+            Repair(player);
             OnInteract();
         }
     }
     
-    protected virtual void Repair() {
+    protected virtual void Repair(PlayerController player) {
 
     }
 
-    public virtual void TrySabotage() {
+    public virtual void TrySabotage(PlayerController player) {
         if (_interactable) {
-            Sabotage();
+            Sabotage(player);
             OnInteract();
         }
     }
 
-    protected virtual void Sabotage() {
+    protected virtual void Sabotage(PlayerController player) {
 
     }
 

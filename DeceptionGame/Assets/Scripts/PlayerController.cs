@@ -86,6 +86,7 @@ public class PlayerController : MonoBehaviour {
 
     private void OnTriggerExit(Collider other) {
         if (other.CompareTag("Interactable")) {
+            Debug.Log("OnTriggerExit: " + other.gameObject.name);
             InteractableObject interactable = other.GetComponent<InteractableObject>();
             if (_nearbyInteractables.Contains(interactable)) {
                 HidePrompts();
@@ -144,14 +145,18 @@ public class PlayerController : MonoBehaviour {
     
     private void TryRepair() {
         if (_closestInteractable != null) {
-            _closestInteractable.GetComponent<InteractableObject>().TryRepair();
+            _closestInteractable.GetComponent<InteractableObject>().TryRepair(this);
         }
     }
 
     private void TrySabotage() {
         if (_closestInteractable != null) {
-            _closestInteractable.GetComponent<InteractableObject>().TrySabotage();
+            _closestInteractable.GetComponent<InteractableObject>().TrySabotage(this);
         }
+    }
+
+    private void TryLeaveEvent(EventManager eventManager) {
+        eventManager.TryLeaveEvent(this);
     }
 
     private void UpdateClosestInteractable() {
@@ -177,6 +182,10 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    public Prop GetProp() {
+        return _heldProp.prop;
+    }
+
     public void AcquireProp(PhysicalProp prop) {
         if (_heldProp != null) {
             DropProp();
@@ -188,6 +197,7 @@ public class PlayerController : MonoBehaviour {
     // Drops current prop at player's location
     private void DropProp() {
         _heldProp.Drop(transform.position);
+        _nearbyInteractables.Remove(_heldProp.GetComponent<InteractableObject>());
         _heldProp = null;
     }
 
