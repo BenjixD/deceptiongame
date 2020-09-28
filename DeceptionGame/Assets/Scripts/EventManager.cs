@@ -15,6 +15,8 @@ public class EventManager : InteractableObject {
     private float _eventCooldown = 0;
     [SerializeField, Tooltip("The time (in seconds) it takes to complete an event after all participants have gathered.")]
     private float _eventCompletionTime = 0;
+    [Tooltip("The maximum number of props/players required for an event. Temporary variable.")]
+    public int tempMaxPropsRequired = 0;
     private bool _eventActive = false;
     private bool _eventProgressing = false;
     private Coroutine _currEventCountdown;
@@ -35,7 +37,7 @@ public class EventManager : InteractableObject {
     private Objective GenerateObjective() {
         // TODO: make objective generation more sophisticated
         List<Prop> selected = new List<Prop>();
-        int quantity = Random.Range(1, 4);
+        int quantity = Random.Range(1, tempMaxPropsRequired + 1);
         for (int i = 0; i < quantity; i++) {
             Prop randomProp = temporaryPropLibrary[Random.Range(0, temporaryPropLibrary.Count)];
             selected.Add(randomProp);
