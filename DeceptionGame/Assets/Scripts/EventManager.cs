@@ -107,7 +107,7 @@ public class EventManager : InteractableObject {
         }
 
         // Finish event if it was completed, or reset progress if it was interrupted
-        if (_currentObjective.ObjectiveOver()) {
+        if (_eventActive && _currentObjective.ObjectiveOver()) {
             EndEvent();
         } else {
             _currentObjective.progress = 0;
@@ -116,6 +116,7 @@ public class EventManager : InteractableObject {
 
     private void EndEvent() {
         _eventActive = false;
+        _eventProgressing = false;
         _interactable = false;
         eventUI.ClearUI();
         UpdatePrompts();
