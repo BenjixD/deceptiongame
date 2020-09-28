@@ -194,11 +194,53 @@ public class PlayerController : MonoBehaviour {
         playerHUD.SetPropImage(prop.sprite);
     }
 
+<<<<<<< 7556858e3f9c84b338cd0bef26c1af241284868a
     // Drops current prop at player's location
     private void DropProp() {
         _heldProp.Drop(transform.position);
         _nearbyInteractables.Remove(_heldProp.GetComponent<InteractableObject>());
         _heldProp = null;
+=======
+    public void TryDropProp() {
+        if (_heldProp != null && IsControllable()) {
+            int track = animController.TakeFreeTrack();
+            if (track != -1) {
+                animController.AddToTrack(track, "drop", false, 0);
+                animController.EndTrackAnims(track);
+            }
+            StartCoroutine(SetAnimationLock(animController.GetAnimationDuration("drop")));
+            LoseProp();
+        }
+    }
+
+    // Sets current prop down at player's location
+    private void LoseProp() {
+        // Drop prop
+        _heldProp.Drop(transform.position);
+        _nearbyInteractables.Remove(_heldProp.GetComponent<InteractableObject>());
+        _heldProp = null;
+
+        // If participating in an event, Withdraw from it
+        EventManager eventManager = GetNearbyEvent();
+        if (eventManager != null) {
+            TryLeaveEvent(eventManager);
+        }
+
+        playerHUD.EmptyProp();
+        animController.SetAnimation(1, "layered arm idle", true);
+>>>>>>> Dropping prop while doing event cancels participation
+    }
+
+    // Tries to return the first nearby event, or null if there isn't one
+    private EventManager GetNearbyEvent() {
+        EventManager eventManager = null;
+        foreach (InteractableObject interactable in _nearbyInteractables) {
+            eventManager = interactable.GetComponent<EventManager>();
+            if (eventManager != null) {
+                return eventManager;
+            }
+        }
+        return null;
     }
 
     // Turn on animation lock for specified duration
