@@ -7,9 +7,6 @@ public class EventManager : InteractableObject {
     public EventUI eventUI;
     public List<Prop> temporaryPropLibrary;
 
-    // TODO: remove
-    public GameObject temporaryEventPopup;
-
     [Space]
 
     [SerializeField, Tooltip("The time (in seconds) between an event starting and the event failing.")]
@@ -30,7 +27,6 @@ public class EventManager : InteractableObject {
         base.Start();
         _objectivesComplete = 0;
         _objectivesFailed = 0;
-        temporaryEventPopup.SetActive(false);
 
         // TODO: move elsewhere
         _currEventCountdown = StartCoroutine(StartEvent());
@@ -39,7 +35,7 @@ public class EventManager : InteractableObject {
     private Objective GenerateObjective() {
         // TODO: make objective generation more sophisticated
         List<Prop> selected = new List<Prop>();
-        int quantity = Random.Range(1, 2);
+        int quantity = Random.Range(1, 4);
         for (int i = 0; i < quantity; i++) {
             Prop randomProp = temporaryPropLibrary[Random.Range(0, temporaryPropLibrary.Count)];
             selected.Add(randomProp);
@@ -59,7 +55,6 @@ public class EventManager : InteractableObject {
 
         // Fail event after time runs out
         yield return new WaitForSeconds(_eventTimer);
-        temporaryEventPopup.SetActive(false);
         EndEvent();
     }
     
@@ -82,7 +77,7 @@ public class EventManager : InteractableObject {
                 CheckObjectiveProgress();
                 UpdatePrompts();
             } else {
-                Debug.Log("Player has improper prop");
+                Debug.Log("Player has improper prop or is already participating in the event");
             }
         }
     }
@@ -120,7 +115,6 @@ public class EventManager : InteractableObject {
     private void EndEvent() {
         _eventActive = false;
         _interactable = false;
-        temporaryEventPopup.SetActive(false);
         eventUI.ClearUI();
         UpdatePrompts();
         

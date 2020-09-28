@@ -146,12 +146,12 @@ GameObject:
   - component: {fileID: 2240751011108170678}
   - component: {fileID: 2240751011108170673}
   m_Layer: 0
-  m_Name: EventPopup
+  m_Name: '[EventPopup]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2240751011108170672
 RectTransform:
   m_ObjectHideFlags: 0
@@ -445,7 +445,6 @@ MonoBehaviour:
   temporaryPropLibrary:
   - {fileID: 11400000, guid: a12a1fe9815952d4b92f7279c8bee4aa, type: 2}
   - {fileID: 11400000, guid: e0dc187d95eb4f34a93374b4660f7f15, type: 2}
-  temporaryEventPopup: {fileID: 2240751011108170675}
   _eventTimer: 120
   _eventCooldown: 30
   _eventCompletionTime: 5

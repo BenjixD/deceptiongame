@@ -813,7 +813,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2240751011785775984, guid: 0da971b228640604ab927d47171a8232, type: 3}
       propertyPath: _eventTimer
-      value: 5
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 2240751011785775984, guid: 0da971b228640604ab927d47171a8232, type: 3}
       propertyPath: _eventCooldown
