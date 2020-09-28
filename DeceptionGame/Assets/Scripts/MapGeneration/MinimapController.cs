@@ -91,9 +91,14 @@ public class MinimapController : MonoBehaviour
         this.minimapMarkers.Remove(hashCode);
     }
 
-    public void MoveToMinimapLocation(Vector3 minimapRaycastPos) {
-        Vector3 minimapToWorldPos = this.minimapMeshFilter.transform.InverseTransformPoint(minimapRaycastPos);
+    public Vector3 MinimapToWorldPos(Vector3 raycastPos) {
+        Vector3 minimapToWorldPos = this.minimapMeshFilter.transform.InverseTransformPoint(raycastPos);
         minimapToWorldPos.y = -this.mapController.mapGenerator.meshGenerator.wallHeight;
+        return minimapToWorldPos;
+    }
+
+    public void MoveToMinimapLocation(Vector3 minimapRaycastPos) {
+        Vector3 minimapToWorldPos = this.MinimapToWorldPos(minimapRaycastPos);
         this.mapController.SetCameraTarget(minimapToWorldPos, null);
     }
 

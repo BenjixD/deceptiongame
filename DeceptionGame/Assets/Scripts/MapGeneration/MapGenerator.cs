@@ -50,6 +50,16 @@ public class MapGenerator : MonoBehaviour {
         return coord;
     }
 
+    public Vector3 NearestWorldPointToMapTile(Vector3 loc) {
+        Coord nearestPoint = this.NearestWorldPointToCoord(loc);
+        if (nearestPoint.tileX != -1) {
+            Vector3 coordPosition = this.CoordToWorldPoint(nearestPoint);
+            return coordPosition;
+        } else {
+            return Vector3.zero;
+        }
+    }
+
     public MapTileType[,] GetMap() {
         return this.map;
     }

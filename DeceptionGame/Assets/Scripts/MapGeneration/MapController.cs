@@ -87,9 +87,8 @@ public class MapController : MonoBehaviour
                     this.minimap.MoveToMinimapLocation(hitInfo.point);
                 } else {
                     // Ping
-                    MapGenerator.Coord nearestPoint = mapGenerator.NearestWorldPointToCoord(hitInfo.point);
-                    if (nearestPoint.tileX != -1) {
-                        Vector3 coordPosition = mapGenerator.CoordToWorldPoint(nearestPoint);
+                    Vector3 coordPosition = mapGenerator.NearestWorldPointToMapTile(hitInfo.point);
+                    if (coordPosition != Vector3.zero) {
                         PingAlertObject pingAlertObject = Instantiate<PingAlertObject>(pingAlertPrefab, coordPosition, Quaternion.identity);
                     }
                 }
