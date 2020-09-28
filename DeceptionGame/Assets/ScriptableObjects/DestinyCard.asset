@@ -15,4 +15,4 @@ MonoBehaviour:
   cardName: Destiny
   cardDescription: See all other players and teleport to one of them
   removeFromHandOnPlay: 1
-  visionTime: 3
+  visionTime: 5
