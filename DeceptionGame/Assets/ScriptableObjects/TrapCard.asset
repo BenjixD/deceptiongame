@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a829751a446d9044928480fa3800bcb, type: 3}
-  m_Name: WildCard
+  m_Script: {fileID: 11500000, guid: 7dedb73ec91ccf845b85d69906f01000, type: 3}
+  m_Name: TrapCard
   m_EditorClassIdentifier: 
-  cardName: WildCard
-  cardDescription: Throw three cards that deal 20 damage each
+  cardName: Bear Trap
+  cardDescription: Card text
   removeFromHandOnPlay: 1
+  prefabObject: {fileID: 5009491042901901628, guid: 8bdeb064c3db27b47971b522d07f249f, type: 3}
   damage: 1
-  speed: 20
-  prefabObject: {fileID: 3255874662563379567, guid: 92d11a25b8fad274eb39b5b8d61faea5, type: 3}
+  stunDuration: 5

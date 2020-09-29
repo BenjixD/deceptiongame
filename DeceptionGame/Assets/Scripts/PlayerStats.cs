@@ -31,6 +31,13 @@ public class PlayerStats : MonoBehaviour
         this.health = maxHealth;
     }
 
+    public void DealDamage(float damage) {
+        health -= damage;
+        if (health <= 0) {
+            this.OnPlayerDeath();
+        }
+    }
+
     public void CheckAilments() {
         List<string> keysToRemove = new List<string>();
         foreach (KeyValuePair<string, StatusAilment> ailmentPair in this.statusAilments) {
@@ -46,6 +53,7 @@ public class PlayerStats : MonoBehaviour
 
 
     public bool HasStatusAilment(string name) {
+
         return this.statusAilments.ContainsKey(name);
     }
 
@@ -59,6 +67,7 @@ public class PlayerStats : MonoBehaviour
             this.statusAilments[ailmentName].endTime = Mathf.Max(this.statusAilments[ailmentName].endTime, endTime);
         } else {
             StatusAilment newAilment = new StatusAilment(ailmentName, true, endTime);
+            this.statusAilments[ailmentName] = newAilment;
         }
     }
 
@@ -70,5 +79,10 @@ public class PlayerStats : MonoBehaviour
 
     public bool CanPlayerMove() {
         return !this.HasStatusAilment(StatusAilment.STATUS_AILMENT_STUNNED) && !this.HasStatusAilment(StatusAilment.STATUS_AILMENT_ROOTED);
+    }
+
+    private void OnPlayerDeath() {
+        // TODO
+        Debug.Log("DED");
     }
 }

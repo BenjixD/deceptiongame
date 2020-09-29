@@ -10,10 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 6593034446872438401}
   - component: {fileID: 6593034446872438402}
-  - component: {fileID: 6593034446872438403}
   - component: {fileID: 6593034446872438404}
   - component: {fileID: 8895005213182818230}
   - component: {fileID: 8849201528159341576}
+  - component: {fileID: 2196604774480762780}
+  - component: {fileID: 5313729816295494187}
+  - component: {fileID: 3255874662563379567}
   m_Layer: 0
   m_Name: CardDamageObject
   m_TagString: Untagged
@@ -86,19 +88,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6593034446872438403
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6593034446872438405}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7930f8f78c5f4324bbbf40b3f3bc1ffe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damageAmount: 1
 --- !u!65 &6593034446872438404
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -110,7 +99,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 8.90625, y: 10, z: 0.2}
+  m_Size: {x: 8.90625, y: 10, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8895005213182818230
 MonoBehaviour:
@@ -144,3 +133,43 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2196604774480762780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6593034446872438405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7930f8f78c5f4324bbbf40b3f3bc1ffe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageAmount: 1
+--- !u!114 &5313729816295494187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6593034446872438405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89fbd52e584246b4aab44b7107a3e221, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3255874662563379567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6593034446872438405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c22660537a8ddd4482130a82cace71f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowFriendlyFire: 0
+  hitPlayersOnly: 1
+  destroyIfOutOfBounds: 1

@@ -24,12 +24,6 @@ public class PlayerCardController : MonoBehaviour
         this.hand[cardIndex].PlayCard();
     }
 
-    public void UpdateActiveCards() {
-        foreach (Card card in this.activeCardsList) {
-            card.PlayCardUpdate();
-        }
-    }
-
     public Card DrawRandomCard() {
         return GameManager.Instance.models.cardPool.GetCardFromPool();
     }
@@ -76,6 +70,10 @@ public class PlayerCardController : MonoBehaviour
     }
 
     public void RemoveCardFromPlayList(Card card) {
-        this.activeCardsList.Remove(card);
+        Card theCard = this.activeCardsList.Find( activeCard => activeCard == card);
+        if (theCard != null) {
+            theCard.OnCardDestroyed();
+            this.activeCardsList.Remove(card);
+        }
     }
 }

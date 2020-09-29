@@ -54,13 +54,18 @@ public class PlayerController : MonoBehaviour {
     private void Update() {
         // Movement
 
-        if (this.playerStats.CanPlayerMove()) { // TODO: move this to PlayerInputController
+
             float inputX = Input.GetAxisRaw("Horizontal");
             float inputY = Input.GetAxisRaw("Vertical");
 
-            _moveDirection.x = inputX;
-            _moveDirection.z = inputY;
-            _moveDirection.Normalize();
+
+            if (this.playerStats.CanPlayerMove()) { // TODO: move this to PlayerInputController
+                _moveDirection.x = inputX;
+                _moveDirection.z = inputY;
+                _moveDirection.Normalize();
+            } else {
+                _moveDirection = Vector3.zero;
+            }
 
             if (inputX == 0) {
                 this.playerHorizontalDirection = PlayerHorizontalDirection.DEFAULT;
@@ -82,18 +87,18 @@ public class PlayerController : MonoBehaviour {
                 TrySabotage();
             }
 
-            this.cardController.UpdateActiveCards();
-
             if (Input.GetKeyDown(KeyCode.Space)) {
                 this.cardController.PlayCardInHand(0);
             }
-        }
       
         this.playerStats.CheckAilments();
     }
 
     private void FixedUpdate() {
         _rb.velocity = _moveDirection * _moveSpeed;
+        if (_moveDirection.magnitude != 0) {
+            Messenger.Broadcast(Messages.OnMoveMainPlayer);
+        }
     }
 
     private void OnTriggerEnter(Collider other) {

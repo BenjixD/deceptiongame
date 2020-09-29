@@ -15,5 +15,6 @@ MonoBehaviour:
   cardName: Damaging card
   cardDescription: Throw a card that deals 20 damage on impact
   removeFromHandOnPlay: 1
+  damage: 1
   speed: 20
-  damageObject: {fileID: 6593034446872438403, guid: 92d11a25b8fad274eb39b5b8d61faea5, type: 3}
+  prefabObject: {fileID: 3255874662563379567, guid: 92d11a25b8fad274eb39b5b8d61faea5, type: 3}

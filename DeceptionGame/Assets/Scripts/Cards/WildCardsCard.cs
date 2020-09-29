@@ -5,8 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/WildCardsCard", order = 2)]
 public class WildCardsCard : Card
 {
+    public float damage = 1f;
     public float speed = 20;
-    public DamageObject damageObject;
+    public TriggerOnCollisionObject prefabObject;
     protected override void PlayCardStart() {
         base.PlayCardStart();
 
@@ -26,10 +27,12 @@ public class WildCardsCard : Card
     }
 
     private void CreateDamageObject(Vector3 velocity, Transform spawnLocation, Transform parentObject) {
-        DamageObject dmgObject = Instantiate<DamageObject>(damageObject);
-        dmgObject.transform.position = spawnLocation.transform.position;
-        dmgObject.transform.SetParent(parentObject);
-        dmgObject.Initialize(velocity, this.player);
+        TriggerOnCollisionObject newObject = Instantiate<TriggerOnCollisionObject>(prefabObject);
+
+        TriggerOnCollisionObject.InitializeDamageStunVelocityHelper(newObject, this.player, this.damage, 0, velocity);
+
+        newObject.transform.position = spawnLocation.transform.position;
+        newObject.transform.SetParent(parentObject);
     }
 
 }

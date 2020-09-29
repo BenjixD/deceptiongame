@@ -29,12 +29,9 @@ public class Card : ScriptableObject {
     protected virtual void PlayCardStart() {
     }
 
-    public virtual void PlayCardUpdate() {
-        // Override me!
-    }
-
-    public void DestroyMe() {
-        this.player.cardController.RemoveCardFromPlayList(this);
+        
+    // Called when this is called: this.player.cardController.RemoveCardFromPlayList(this);
+    public virtual void OnCardDestroyed() {
     }
 
     protected Vector3 GetDirectionHelper() {

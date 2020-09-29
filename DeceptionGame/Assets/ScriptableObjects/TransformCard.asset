@@ -9,12 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a829751a446d9044928480fa3800bcb, type: 3}
-  m_Name: WildCard
+  m_Script: {fileID: 11500000, guid: dae19942f5a5b8e4499f6d521243f5c9, type: 3}
+  m_Name: TransformCard
   m_EditorClassIdentifier: 
-  cardName: WildCard
-  cardDescription: Throw three cards that deal 20 damage each
+  cardName: Transform
+  cardDescription: Transforms into an object
   removeFromHandOnPlay: 1
-  damage: 1
-  speed: 20
-  prefabObject: {fileID: 3255874662563379567, guid: 92d11a25b8fad274eb39b5b8d61faea5, type: 3}
+  pretendPropsPool:
+  - {fileID: 373514445975285243, guid: 1f58ee1e6a066904e80249fbc2ba20f4, type: 3}
