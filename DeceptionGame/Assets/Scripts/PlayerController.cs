@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour {
 
     public Transform throwLocation; // Might want to be its own class later on like in Mooks if we have too many...
 
+    public PlayerStats playerStats;
+
     [SerializeField] private Rigidbody _rb = null;
 
     [Space]
@@ -44,43 +46,50 @@ public class PlayerController : MonoBehaviour {
             this.enabled = false; // TODO: Change logic to be more sophisticated
         }
 
+        this.playerStats.Initialize();
+
         this.cardController.Initialize(this);
     }
 
     private void Update() {
         // Movement
-        float inputX = Input.GetAxisRaw("Horizontal");
-        float inputY = Input.GetAxisRaw("Vertical");
 
-        _moveDirection.x = inputX;
-        _moveDirection.z = inputY;
-        _moveDirection.Normalize();
+        if (this.playerStats.CanPlayerMove()) { // TODO: move this to PlayerInputController
+            float inputX = Input.GetAxisRaw("Horizontal");
+            float inputY = Input.GetAxisRaw("Vertical");
 
-        if (inputX == 0) {
-            this.playerHorizontalDirection = PlayerHorizontalDirection.DEFAULT;
-        } else {
-            this.playerHorizontalDirection = inputX >= 0 ? PlayerHorizontalDirection.RIGHT : PlayerHorizontalDirection.LEFT;
+            _moveDirection.x = inputX;
+            _moveDirection.z = inputY;
+            _moveDirection.Normalize();
+
+            if (inputX == 0) {
+                this.playerHorizontalDirection = PlayerHorizontalDirection.DEFAULT;
+            } else {
+                this.playerHorizontalDirection = inputX >= 0 ? PlayerHorizontalDirection.RIGHT : PlayerHorizontalDirection.LEFT;
+            }
+
+            if (inputY == 0) {
+                this.playerVerticalDirection = PlayerVerticalDirection.DEFAULT;
+            } else {
+                this.playerVerticalDirection = inputY >= 0 ? PlayerVerticalDirection.UP : PlayerVerticalDirection.DOWN;
+            }
+
+            if (Input.GetButtonDown("PickUp")) {
+                TryPickUpProp();
+            } else if (Input.GetButtonDown("Repair")) {
+                TryRepair();
+            } else if (Input.GetButtonDown("Sabotage")) {
+                TrySabotage();
+            }
+
+            this.cardController.UpdateActiveCards();
+
+            if (Input.GetKeyDown(KeyCode.Space)) {
+                this.cardController.PlayCardInHand(0);
+            }
         }
-
-        if (inputY == 0) {
-            this.playerVerticalDirection = PlayerVerticalDirection.DEFAULT;
-        } else {
-            this.playerVerticalDirection = inputY >= 0 ? PlayerVerticalDirection.UP : PlayerVerticalDirection.DOWN;
-        }
-
-        if (Input.GetButtonDown("PickUp")) {
-            TryPickUpProp();
-        } else if (Input.GetButtonDown("Repair")) {
-            TryRepair();
-        } else if (Input.GetButtonDown("Sabotage")) {
-            TrySabotage();
-        }
-
-        this.cardController.UpdateActiveCards();
-
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            this.cardController.PlayCardInHand(0);
-        }
+      
+        this.playerStats.CheckAilments();
     }
 
     private void FixedUpdate() {

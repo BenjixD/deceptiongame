@@ -71,7 +71,13 @@ public class DestinyCard : Card
                 return false;
             }
 
+
             Vector3 finalTeleportPoint =  mapController.mapGenerator.CoordToWorldPoint(nearestCoord);
+
+            if (!mapController.fogOfWarGenerator.IsObjectVisible(finalTeleportPoint)) {
+                return false;
+            }
+
 
             this.player.transform.position = finalTeleportPoint;
         }
