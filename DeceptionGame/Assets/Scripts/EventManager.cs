@@ -5,6 +5,7 @@ using UnityEngine;
 public class EventManager : InteractableObject {
     [Header("References")]
     public EventUI eventUI;
+    public EventHistoryUI eventHistoryUI;
     public List<Prop> temporaryPropLibrary;
 
     [Space]
@@ -17,7 +18,6 @@ public class EventManager : InteractableObject {
     private float _eventCompletionTime = 0;
     [Tooltip("The maximum number of props/players required for an event. Temporary variable.")]
     public int tempMaxPropsRequired = 0;
-    private bool _eventActive = false;
     private bool _eventProgressing = false;
     private Coroutine _currEventCountdown;
     private Objective _currentObjective;
@@ -47,7 +47,6 @@ public class EventManager : InteractableObject {
     }
 
     private IEnumerator StartEvent() {
-        _eventActive = true;
         _interactable = true;
         _currentObjective = GenerateObjective();
         eventUI.SetObjective(_currentObjective);
@@ -70,8 +69,12 @@ public class EventManager : InteractableObject {
         JoinEvent(player, true);
     }
 
+    public bool EventActive() {
+        return _currentObjective != null;
+    }
+
     private void JoinEvent(PlayerController player, bool sabotage) {
-        if (_eventActive) {
+        if (EventActive()) {
             Prop prop = player.GetProp();
             if (prop != null && _currentObjective.ValidParticipant(player)) {
                 eventUI.CheckOffProp(player, sabotage);
@@ -85,9 +88,15 @@ public class EventManager : InteractableObject {
     }
 
     public void TryLeaveEvent(PlayerController player) {
-        if (_currentObjective.HasParticipant(player)) {
-            _currentObjective.RemoveContribution(player);
+        if (EventActive() &&_currentObjective.HasParticipant(player)) {
             eventUI.UncheckProp(player);
+<<<<<<< 371d0b1f63714f14190129c543c75779867a5cb0
+=======
+            _currentObjective.RemoveContribution(player);
+            _currentObjective.progress = 0;
+            _eventProgressing = false;
+            UpdateProgress();
+>>>>>>> UI showing event history, bug fixes
             UpdatePrompts();
         }
     }
@@ -106,16 +115,20 @@ public class EventManager : InteractableObject {
             yield return null;
         }
 
-        // Finish event if it was completed, or reset progress if it was interrupted
-        if (_eventActive && _currentObjective.ObjectiveOver()) {
-            EndEvent();
-        } else {
-            _currentObjective.progress = 0;
+        if (EventActive()) {
+            // Finish event if it was completed, or reset progress if it was interrupted
+            if ( _currentObjective.ObjectiveOver()) {
+                EndEvent();
+            } else {
+                _currentObjective.progress = 0;
+            }
         }
     }
 
     private void EndEvent() {
-        _eventActive = false;
+        if (!EventActive()) {
+            return;
+        }
         _eventProgressing = false;
         _interactable = false;
         eventUI.ClearUI();
@@ -136,7 +149,12 @@ public class EventManager : InteractableObject {
             Debug.Log("Event failed (timeout)");
             _objectivesFailed++;
         }
-        
+
+        // Update event history
+        int barIndex = _objectivesComplete + _objectivesFailed - 1;
+        eventHistoryUI.SetBar(barIndex, _currentObjective);
+        _currentObjective = null;
+
         if (!GameOver()) {
             StartCoroutine(PrepareNextEvent());
         }

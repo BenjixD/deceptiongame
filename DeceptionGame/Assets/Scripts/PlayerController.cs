@@ -7,17 +7,10 @@ public class PlayerController : MonoBehaviour {
     public ShowOnlyIfInRange showIfInRangeScript;
     public PlayerHUD playerHUD;
 
-    [Space]
-
     [Header("Controllers")]
     public PlayerMovementController mvController;
     public AnimationController animController;
 
-    [Space]
-
-    [SerializeField] private float _moveSpeed = 0;
-    private Vector3 _moveDirection = Vector3.zero;
-    // [SerializeField] private float _interactionRadius = 0;
     private List<InteractableObject> _nearbyInteractables = new List<InteractableObject>();
     private InteractableObject _closestInteractable;
     private PhysicalProp _heldProp = null;
@@ -53,6 +46,10 @@ public class PlayerController : MonoBehaviour {
         UpdateAnims();
     }
 
+    public bool IsControllable() {
+        return !_animLocked;
+    }
+
     public void UpdateAnims() {
         if (mvController.moveDirection == Vector3.zero) {
             // Idle anims
@@ -86,7 +83,6 @@ public class PlayerController : MonoBehaviour {
 
     private void OnTriggerExit(Collider other) {
         if (other.CompareTag("Interactable")) {
-            Debug.Log("OnTriggerExit: " + other.gameObject.name);
             InteractableObject interactable = other.GetComponent<InteractableObject>();
             if (_nearbyInteractables.Contains(interactable)) {
                 HidePrompts();
@@ -183,24 +179,21 @@ public class PlayerController : MonoBehaviour {
     }
 
     public Prop GetProp() {
+        if (_heldProp == null) {
+            return null;
+        }
         return _heldProp.prop;
     }
 
-    public void AcquireProp(PhysicalProp prop) {
+public void AcquireProp(PhysicalProp prop) {
         if (_heldProp != null) {
-            DropProp();
+            LoseProp();
         }
         _heldProp = prop;
-        playerHUD.SetPropImage(prop.sprite);
+        playerHUD.PickUpProp(prop);
+        animController.SetAnimation(1, "layered holding idle", true);
     }
 
-<<<<<<< 7556858e3f9c84b338cd0bef26c1af241284868a
-    // Drops current prop at player's location
-    private void DropProp() {
-        _heldProp.Drop(transform.position);
-        _nearbyInteractables.Remove(_heldProp.GetComponent<InteractableObject>());
-        _heldProp = null;
-=======
     public void TryDropProp() {
         if (_heldProp != null && IsControllable()) {
             int track = animController.TakeFreeTrack();
@@ -228,7 +221,6 @@ public class PlayerController : MonoBehaviour {
 
         playerHUD.EmptyProp();
         animController.SetAnimation(1, "layered arm idle", true);
->>>>>>> Dropping prop while doing event cancels participation
     }
 
     // Tries to return the first nearby event, or null if there isn't one
