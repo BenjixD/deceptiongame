@@ -46,41 +46,19 @@ public class DestinyCard : Card
     }
 
     private bool DoTeleport() {
-
         MapController mapController = GameManager.Instance.controller.mapController; // Just to shorten things
 
-        RaycastHit hitInfo;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hitInfo)) {
+        Vector3 finalTeleportPoint = mapController.GetMapOrMinimapClickLocation(false);
 
-            MapTileType[,] map = mapController.mapGenerator.GetMap();
-
-            Vector3 teleportLocation = Vector3.zero;
-            if (hitInfo.transform.tag == "Minimap") {
-                // Clicked on minimap
-                teleportLocation = mapController.minimap.MinimapToWorldPos(hitInfo.point);
-
-            } else {
-                teleportLocation = hitInfo.point;
-            }
-
-            MapGenerator.Coord nearestCoord = mapController.mapGenerator.NearestWorldPointToCoord(teleportLocation);
-            
-
-            if (nearestCoord.tileX == -1 || map[nearestCoord.tileX, nearestCoord.tileY] == MapTileType.WALL) {
-                return false;
-            }
-
-
-            Vector3 finalTeleportPoint =  mapController.mapGenerator.CoordToWorldPoint(nearestCoord);
-
-            if (!mapController.fogOfWarGenerator.IsObjectVisible(finalTeleportPoint)) {
-                return false;
-            }
-
-
-            this.player.transform.position = finalTeleportPoint;
+        if (finalTeleportPoint.z == -1) {
+            return false;
         }
+
+        if (!mapController.fogOfWarGenerator.IsObjectVisible(finalTeleportPoint)) {
+            return false;
+        }
+
+        this.player.transform.position = finalTeleportPoint;
 
         return true;
     }

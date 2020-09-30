@@ -21,7 +21,6 @@ public class CardUIView : MonoBehaviour
 
     public void PressPlayCardsButton() {
         isShowing = !isShowing;
-        // TODO:
         this.cardUIParent.gameObject.SetActive(isShowing);
 
         if (isShowing) {

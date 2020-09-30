@@ -26,18 +26,26 @@ public class MapVisibility {
     }
 };
 
+public class MapVision {
+    public Vector3 location;
+    public float radius = -1; // -1 = player's radius
+    public MapVision(Vector3 location, float radius = -1) {
+        this.location = location;
+        this.radius = radius;
+    }
+};
+
 public class FogOfWarGenerator : MonoBehaviour {
 	
 	public GameObject fogOfWarPlane;
 	public Transform player{get; set;}
 	public LayerMask fogLayer;
-	public float radius = 5f;
+	public float playerVisionRadius = 5f;
 
     public float unseenAlpha = 0.8f;
 
     public float maxDistance = 100;
 
-	private float m_radiusSqr { get { return radius*radius; }}
 	
 	public Mesh m_mesh{get; set;}
 	private Vector3[] m_vertices;
@@ -50,7 +58,7 @@ public class FogOfWarGenerator : MonoBehaviour {
     private MapVisibility[] playerMapVisibility;
     private Vector3[] worldPosVertices;
 
-    private List<Vector3> visionLocations = new List<Vector3>();
+    private List<MapVision> visionLocations = new List<MapVision>();
 
     public void Initialize(MapController controller) {
         this.mapController = controller;
@@ -65,7 +73,8 @@ public class FogOfWarGenerator : MonoBehaviour {
             return;
         }
 
-        this.CastVisionOn(player.transform.position);
+        MapVision playerVision = new MapVision(player.transform.position, this.playerVisionRadius);
+        this.CastVisionOn(playerVision);
 
         this.UpdateMapVisibility();
 
@@ -74,8 +83,17 @@ public class FogOfWarGenerator : MonoBehaviour {
 	}
 
     // Casts vision FOR A SINGLE FRAME
-    public void CastVisionOn(Vector3 position) {
-        this.visionLocations.Add(position);
+    public void CastVisionOn(MapVision mapVision) {
+        if (mapVision.radius == -1) {
+            mapVision.radius = this.playerVisionRadius;
+        }
+
+        this.visionLocations.Add(mapVision);
+    }
+
+    // Cast vision using player's vision as reference
+    public void CastVisionOn(Vector3 visionLocation) {
+        this.CastVisionOn(new MapVision(visionLocation));
     }
 
     // This is where the magic happens for Fog of war
@@ -85,7 +103,8 @@ public class FogOfWarGenerator : MonoBehaviour {
             this.playerMapVisibility[i].Reset();
         }
 
-        foreach (Vector3 position in this.visionLocations) {
+        foreach (MapVision mapVision in this.visionLocations) {
+            Vector3 position = mapVision.location;
             Vector3 rayOrigin = position + Vector3.up * maxDistance;
 
             Ray r = new Ray(rayOrigin, position - rayOrigin);
@@ -99,12 +118,14 @@ public class FogOfWarGenerator : MonoBehaviour {
             
 
                     float dist = Vector3.SqrMagnitude(v - hit.point);
-                    if (dist < m_radiusSqr) {
-                        float attenuation = dist / m_radiusSqr;
+                    float radiusSqr = mapVision.radius * mapVision.radius;
+
+                    if (dist < radiusSqr) {
+                        float attenuation = dist / radiusSqr;
                         
                         //float alpha = Mathf.Min(m_colors[i].a, dist/m_radiusSqr);
                         float alpha;
-                        if (dist >= m_radiusSqr / 3) {
+                        if (dist >= radiusSqr / 3) {
                             alpha = attenuation;
                         } else {
                             alpha = attenuation * attenuation;

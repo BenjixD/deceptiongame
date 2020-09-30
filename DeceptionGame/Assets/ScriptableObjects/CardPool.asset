@@ -18,7 +18,7 @@ MonoBehaviour:
   tmp_useDebugCard: 1
   tmp_debugCards:
   - {fileID: 11400000, guid: 16e44b066d2e2134292ea836102f398f, type: 2}
-  - {fileID: 11400000, guid: 3ed6873a943fe2b439eacfd15bfa088c, type: 2}
-  - {fileID: 11400000, guid: 85fe151804fec4d43841ca3793379fac, type: 2}
+  - {fileID: 11400000, guid: 6ffbff39d01c63149993928df5e376c7, type: 2}
+  - {fileID: 11400000, guid: 386d82e3a2fecea42b0bd2dc707f0fac, type: 2}
   - {fileID: 11400000, guid: 634f1f52c84082641af07e4afad85c86, type: 2}
   - {fileID: 11400000, guid: f9282ee363d11204ebbbb4ef81a68cd3, type: 2}

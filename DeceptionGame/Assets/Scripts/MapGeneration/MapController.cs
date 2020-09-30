@@ -76,6 +76,45 @@ public class MapController : MonoBehaviour
         Camera.main.transform.SetParent(parent);
     }
 
+    // Gets the current map or minimap location based on mouse location
+    public Vector3 GetMapOrMinimapClickLocation(bool allowWalls) {
+
+        RaycastHit hitInfo;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Vector3 errorVector = new Vector3(0, 0, -1);
+
+        if (Physics.Raycast(ray, out hitInfo)) {
+
+            MapTileType[,] map = this.mapGenerator.GetMap();
+
+            Vector3 teleportLocation = Vector3.zero;
+            if (hitInfo.transform.tag == "Minimap") {
+                // Clicked on minimap
+                teleportLocation = this.minimap.MinimapToWorldPos(hitInfo.point);
+
+            } else {
+                teleportLocation = hitInfo.point;
+            }
+
+            MapGenerator.Coord nearestCoord = this.mapGenerator.NearestWorldPointToCoord(teleportLocation);
+            
+            if (nearestCoord.tileX == -1) {
+                return errorVector;
+            }
+
+            if (!allowWalls) {
+                if (map[nearestCoord.tileX, nearestCoord.tileY] == MapTileType.WALL) {
+                    return errorVector;
+                }
+            }
+
+            Vector3 finalTeleportPoint =  this.mapGenerator.CoordToWorldPoint(nearestCoord);
+            return finalTeleportPoint;
+        } else {
+            return errorVector;
+        }
+    }
+
 	void Update() {
 		if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject()) {
             RaycastHit hitInfo;
