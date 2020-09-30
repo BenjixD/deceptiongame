@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 373514445975285239}
   - component: {fileID: 373514445975285238}
   - component: {fileID: 373514445975285240}
-  - component: {fileID: 373514445975285241}
   - component: {fileID: 373514445975285243}
+  - component: {fileID: 1390479626038324197}
   m_Layer: 0
   m_Name: PretendProp
   m_TagString: Interactable
@@ -99,18 +99,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.725
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &373514445975285241
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 373514445975285242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b61034b737b47234d974b1ed19e626a8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &373514445975285243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,6 +112,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interactionPrompts: {fileID: 3623161914340239198}
+--- !u!114 &1390479626038324197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 373514445975285242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 757f9ee49241696478b6721b3adfe774, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 0}
+  doOnUpdate: 1
+  lookOpposite: 0
+  maxSquaredDistance: 1000
 --- !u!1 &674237462930682623
 GameObject:
   m_ObjectHideFlags: 0

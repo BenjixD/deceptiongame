@@ -9,7 +9,7 @@ public class UICardImage : MonoBehaviour
     public TextMeshProUGUI titleText;
     public TextMeshProUGUI descriptionText;
 
-    private Card card;
+    public Card card{get; set;}
 
     public void Initialize(Card card) {
         this.titleText.SetText(card.cardName);

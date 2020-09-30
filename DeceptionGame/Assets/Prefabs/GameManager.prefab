@@ -58,3 +58,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardPool: {fileID: 11400000, guid: 7d320102595806e4b9accfc79ab9c558, type: 2}
+  cardPropPrefab: {fileID: 5101601280070928749, guid: 2effd35a5647fa1409fab90e92c3b655, type: 3}

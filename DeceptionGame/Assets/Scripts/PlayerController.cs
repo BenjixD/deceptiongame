@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.EventSystems;
 
 public enum PlayerHorizontalDirection {
     DEFAULT,
@@ -90,8 +90,41 @@ public class PlayerController : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.Space)) {
                 this.cardController.PlayCardInHand(0);
             }
+
+
+            // TODO: Find a better place to do this
+            // Drop card
+            if (Input.GetKeyDown(KeyCode.G) && EventSystem.current.IsPointerOverGameObject()) {
+                Debug.Log("Drop card");
+                this.TryDropCard();
+            }
       
         this.playerStats.CheckAilments();
+    }
+
+    private void TryDropCard() {
+
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = Input.mousePosition;
+        List<RaycastResult> raycastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, raycastResults);
+
+        RaycastResult hitResult = raycastResults.Find(raycast => raycast.gameObject.tag == "UICardImage");
+
+        if (hitResult.gameObject != null) {
+            Debug.Log("Hit");
+            UICardImage uiCardImage = hitResult.gameObject.GetComponent<UICardImage>();
+            Card theCardReference = uiCardImage.card;
+            this.cardController.RemoveCardFromHand(theCardReference);
+            CardProp cardProp = Instantiate<CardProp>(GameManager.Instance.models.cardPropPrefab);
+            cardProp.Initialize(theCardReference);
+            cardProp.transform.position = this.transform.position;
+            
+        } else {
+            Debug.Log("Missed");
+        }
+        
+
     }
 
     private void FixedUpdate() {

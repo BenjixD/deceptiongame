@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5009491042901901624}
   - component: {fileID: 5009491042901901629}
   - component: {fileID: 7591655119592019898}
+  - component: {fileID: 1808900883957688713}
   m_Layer: 0
   m_Name: BearTrap
   m_TagString: Untagged
@@ -157,3 +158,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   removeFromMinimapOnLostVision: 0
   minimapSprite: {fileID: 21300000, guid: 4290659edc47dbd4a8db64c2a9f36ed2, type: 3}
+--- !u!114 &1808900883957688713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5009491042901901627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 757f9ee49241696478b6721b3adfe774, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 0}
+  doOnUpdate: 1
+  lookOpposite: 0
+  maxSquaredDistance: 1000
