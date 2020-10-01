@@ -164,10 +164,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showIfInRangeScript: {fileID: 8728841446385156029}
-  _mvController: {fileID: 963921399}
   playerHUD: {fileID: 1701863162904388782}
+  mvController: {fileID: 963921399}
   animController: {fileID: 7515373401849352158}
-  _moveSpeed: 10
 --- !u!114 &8728841446385156029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,8 +207,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d937baecf1f441fdb6eb63645d39b34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerController: {fileID: 639585649983949254}
   _rb: {fileID: 480530025423308901}
-  _moveSpeed: 10
+  _moveSpeed: 20
+  moveDirection: {x: 0, y: 0, z: 0}
 --- !u!1 &5410785221058594597
 GameObject:
   m_ObjectHideFlags: 0

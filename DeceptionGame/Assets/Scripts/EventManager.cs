@@ -82,7 +82,7 @@ public class EventManager : InteractableObject {
                 CheckObjectiveProgress();
                 UpdatePrompts();
             } else {
-                Debug.Log("Player has improper prop or is already participating in the event");
+                Debug.Log("Cannot repair: player has improper prop or is already participating in the event");
             }
         }
     }
@@ -90,13 +90,10 @@ public class EventManager : InteractableObject {
     public void TryLeaveEvent(PlayerController player) {
         if (EventActive() &&_currentObjective.HasParticipant(player)) {
             eventUI.UncheckProp(player);
-<<<<<<< 371d0b1f63714f14190129c543c75779867a5cb0
-=======
             _currentObjective.RemoveContribution(player);
             _currentObjective.progress = 0;
             _eventProgressing = false;
             UpdateProgress();
->>>>>>> UI showing event history, bug fixes
             UpdatePrompts();
         }
     }
@@ -111,7 +108,7 @@ public class EventManager : InteractableObject {
     private IEnumerator ProgressEvent() {
         while (_eventProgressing && !_currentObjective.ObjectiveOver()) {
             _currentObjective.progress += Time.deltaTime;
-            eventUI.SetProgress(_currentObjective.GetProgressPercent());
+            UpdateProgress();
             yield return null;
         }
 
@@ -123,6 +120,10 @@ public class EventManager : InteractableObject {
                 _currentObjective.progress = 0;
             }
         }
+    }
+
+    private void UpdateProgress() {
+        eventUI.SetProgress(_currentObjective.GetProgressPercent());
     }
 
     private void EndEvent() {

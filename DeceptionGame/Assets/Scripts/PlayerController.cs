@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour {
     private InteractableObject _closestInteractable;
     private PhysicalProp _heldProp = null;
     private bool _animLocked;
+    private void Start() {
+        Spawn();
+    }
 
     public void Initialize(Transform mainPlayerTransform) {
         if (mainPlayerTransform != null) {
@@ -43,6 +46,7 @@ public class PlayerController : MonoBehaviour {
                 TrySabotage();
             }
         }
+
         UpdateAnims();
     }
 
@@ -81,16 +85,22 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    private void OnTriggerExit(Collider other) {
-        if (other.CompareTag("Interactable")) {
-            InteractableObject interactable = other.GetComponent<InteractableObject>();
-            if (_nearbyInteractables.Contains(interactable)) {
-                HidePrompts();
-                _nearbyInteractables.Remove(interactable);
-                UpdatePrompts();
-            }
-        }
-    }
+	private void OnTriggerExit(Collider other) {
+	        if (other.CompareTag("Interactable")) {
+	            InteractableObject interactable = other.GetComponent<InteractableObject>();
+	            if (_nearbyInteractables.Contains(interactable)) {
+	                HidePrompts();
+	                _nearbyInteractables.Remove(interactable);
+	                UpdatePrompts();
+	            }
+	
+	            // Withdraw from events upon moving out of range
+	            EventManager eventManager = other.GetComponent<EventManager>();
+	            if (eventManager != null) {
+	                TryLeaveEvent(eventManager);
+	            }
+	        }
+	    }
 
     public void UpdatePrompts() {
         HidePrompts();
@@ -185,7 +195,7 @@ public class PlayerController : MonoBehaviour {
         return _heldProp.prop;
     }
 
-public void AcquireProp(PhysicalProp prop) {
+    public void AcquireProp(PhysicalProp prop) {
         if (_heldProp != null) {
             LoseProp();
         }
@@ -240,5 +250,18 @@ public void AcquireProp(PhysicalProp prop) {
         _animLocked = true;
         yield return new WaitForSeconds(duration);
         _animLocked = false;
+    }
+
+    // Handles spawning and its animation
+    private void Spawn() {
+        float spawnAnimDuration = animController.GetAnimationDuration("spawn");
+        StartCoroutine(SetAnimationLock(spawnAnimDuration));
+
+        // Play the animation
+        int track = animController.TakeFreeTrack();
+        if (track != -1) {
+            animController.AddToTrack(track, "spawn", false, 0);
+            animController.EndTrackAnims(track);
+        }
     }
 }
