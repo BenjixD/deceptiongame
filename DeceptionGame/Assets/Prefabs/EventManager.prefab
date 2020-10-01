@@ -342,7 +342,7 @@ GameObject:
   - component: {fileID: 2240751011785775984}
   - component: {fileID: 8853282112485007194}
   m_Layer: 0
-  m_Name: Car
+  m_Name: EventManager
   m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -442,13 +442,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interactionPrompts: {fileID: 3908889588202421377}
   eventUI: {fileID: 8541949534204004295}
+  eventHistoryUI: {fileID: 0}
   temporaryPropLibrary:
   - {fileID: 11400000, guid: a12a1fe9815952d4b92f7279c8bee4aa, type: 2}
   - {fileID: 11400000, guid: e0dc187d95eb4f34a93374b4660f7f15, type: 2}
   _eventTimer: 120
   _eventCooldown: 30
   _eventCompletionTime: 5
-  tempMaxPropsRequired: 4
+  tempNumPlayers: 4
 --- !u!114 &8853282112485007194
 MonoBehaviour:
   m_ObjectHideFlags: 0

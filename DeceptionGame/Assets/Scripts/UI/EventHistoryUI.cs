@@ -4,22 +4,19 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class EventHistoryUI : MonoBehaviour {
-    [SerializeField] private Image[] _eventBars = null;
-    
-    // Temporary colours for placeholder UI
-    [SerializeField] private Color _tempBlue;
-    [SerializeField] private Color _tempRed;
+    [SerializeField] private EventHistoryBar[] _eventBars = null;
+
+    public void InitializeBars(ObjectiveParams[] objectiveParams) {
+        for (int i = 0; i < objectiveParams.Length; i++) {
+            _eventBars[i].Initialize(objectiveParams[i]);
+        }
+    }
 
     public void SetBar(int barIndex, Objective objective) {
         if (barIndex >= _eventBars.Length) {
             Debug.LogWarning("Tried to set event history bar that does not exist");
             return;
         }
-        if (objective.ObjectiveComplete()) {
-            _eventBars[barIndex].color = _tempBlue;
-        } else {
-            _eventBars[barIndex].color = _tempRed;
-        }
-        // TODO: show other information, like the participants of the event
+        _eventBars[barIndex].SetBar(objective);
     }
 }

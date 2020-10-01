@@ -16,8 +16,8 @@ public class EventManager : InteractableObject {
     private float _eventCooldown = 0;
     [SerializeField, Tooltip("The time (in seconds) it takes to complete an event after all participants have gathered.")]
     private float _eventCompletionTime = 0;
-    [Tooltip("The maximum number of props/players required for an event. Temporary variable.")]
-    public int tempMaxPropsRequired = 0;
+    [Tooltip("The maximum number of players in this game. Temporary variable for testing.")]
+    public int tempNumPlayers = 1;
     private bool _eventProgressing = false;
     private Coroutine _currEventCountdown;
     private Objective _currentObjective;
@@ -25,33 +25,55 @@ public class EventManager : InteractableObject {
     private int _objectivesFailed;
     private int _totalObjectives = 5;
 
+    // Dictionary mapping ObjectiveParams (participants required and saboteurs needed for failure for each event) to total number of players.
+    private Dictionary<int, ObjectiveParams[]> _objectiveParams =
+        new Dictionary<int, ObjectiveParams[]>() {
+            {1, new ObjectiveParams[] { new ObjectiveParams(1, 1), new ObjectiveParams(1, 1), new ObjectiveParams(1, 1), new ObjectiveParams(1, 1), new ObjectiveParams(1, 1) }}, // 1 player for testing purposes
+            {4, new ObjectiveParams[] { new ObjectiveParams(2, 1), new ObjectiveParams(3, 1), new ObjectiveParams(2, 1), new ObjectiveParams(3, 1), new ObjectiveParams(3, 1) }}
+        };
+
     protected override void Start() {
         base.Start();
         _objectivesComplete = 0;
         _objectivesFailed = 0;
+        eventHistoryUI.InitializeBars(_objectiveParams[tempNumPlayers]);
 
         // TODO: move elsewhere
         _currEventCountdown = StartCoroutine(StartEvent());
     }
 
+
+    private ObjectiveParams GetObjectiveParams(int totalPlayers) {
+        if (!_objectiveParams.ContainsKey(totalPlayers)) {
+            Debug.LogWarning("Events not configured for game with " + totalPlayers + " players");
+            return null;
+        }
+        int eventNumber = _objectivesComplete + _objectivesFailed;
+        if (eventNumber >= _objectiveParams[totalPlayers].Length) {
+            Debug.LogWarning("No params found for round " + (eventNumber + 1) + " for game with " + totalPlayers + " players");
+            return null;
+        }
+        return _objectiveParams[totalPlayers][eventNumber];
+    }
+
     private Objective GenerateObjective() {
-        // TODO: make objective generation more sophisticated
+        // TODO: get number of players properly
+        ObjectiveParams objectiveParams = GetObjectiveParams(tempNumPlayers);
         List<Prop> selected = new List<Prop>();
-        int quantity = Random.Range(1, tempMaxPropsRequired + 1);
+
+        // Randomize what props are needed
+        int quantity = objectiveParams.participants;
         for (int i = 0; i < quantity; i++) {
             Prop randomProp = temporaryPropLibrary[Random.Range(0, temporaryPropLibrary.Count)];
             selected.Add(randomProp);
         }
-        int saboteursNeededToFail = 1;
-        return new Objective(selected, _eventCompletionTime, saboteursNeededToFail);
+        return new Objective(objectiveParams, selected, _eventCompletionTime);
     }
 
     private IEnumerator StartEvent() {
         _interactable = true;
         _currentObjective = GenerateObjective();
         eventUI.SetObjective(_currentObjective);
-
-        // temporaryEventPopup.SetActive(true);
         UpdatePrompts();
 
         // Fail event after time runs out

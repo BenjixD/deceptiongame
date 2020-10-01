@@ -22,7 +22,18 @@ public class ParticipationInfo {
     }
 }
 
+public class ObjectiveParams {
+    public int participants;
+    public int saboteursNeededToFail;
+
+    public ObjectiveParams(int participants, int saboteursNeededToFail) {
+        this.participants = participants;
+        this.saboteursNeededToFail = saboteursNeededToFail;
+    }
+}
+
 public class Objective {
+    public ObjectiveParams objectiveParams;
     // The props involved in this objective, the quantity required to complete it, and the quantity currently collected
     private Dictionary<Prop, PropRequirements> _propChecklist = new Dictionary<Prop, PropRequirements>();
     // Dictionary of participants in this event and whether they chose to fail it
@@ -31,11 +42,10 @@ public class Objective {
     private float _timeToComplete;
     // The number of players/props currently involved in sabotaging this objective
     private int _saboteurs;
-    private int _saboteursNeededToFail;
 
-    public Objective(List<Prop> props, float timeToComplete, int saboteursNeededToFail) {
+    public Objective(ObjectiveParams objectiveParams, List<Prop> props, float timeToComplete) {
+        this.objectiveParams = objectiveParams;
         _timeToComplete = timeToComplete;
-        _saboteursNeededToFail = saboteursNeededToFail;
         progress = 0;
         _saboteurs = 0;
         foreach (Prop prop in props) {
@@ -107,6 +117,6 @@ public class Objective {
     }
 
     public bool ObjectiveComplete() {
-        return ObjectiveOver() && _saboteurs < _saboteursNeededToFail;
+        return ObjectiveOver() && _saboteurs < objectiveParams.saboteursNeededToFail;
     }
 }
