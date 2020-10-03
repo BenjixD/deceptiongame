@@ -5,12 +5,13 @@ using Bolt;
 
 public class PlayerMovementController : Bolt.EntityBehaviour<INetPlayerState> {
     [Header("References")]
+    public PlayerController playerController;
     [SerializeField] private Rigidbody _rb = null;
 
     [Space]
 
     [SerializeField] private float _moveSpeed = 0;
-    private Vector3 _moveDirection = Vector3.zero;
+    [HideInInspector] public Vector3 moveDirection = Vector3.zero;
 
     public override void Attached()
     {
@@ -19,12 +20,15 @@ public class PlayerMovementController : Bolt.EntityBehaviour<INetPlayerState> {
     }
 
     public override void SimulateOwner() {
-        // Movement
-        _moveDirection.x = Input.GetAxisRaw("Horizontal");
-        _moveDirection.z = Input.GetAxisRaw("Vertical");
-        _moveDirection.Normalize();
-
-        _rb.velocity = _moveDirection * _moveSpeed;
+        if (playerController.IsControllable()) {
+            // Movement
+            moveDirection.x = Input.GetAxisRaw("Horizontal");
+            moveDirection.z = Input.GetAxisRaw("Vertical");
+            moveDirection.Normalize();
+        }  else {
+            moveDirection = Vector3.zero;
+        }
+        _rb.velocity = moveDirection * _moveSpeed;
     }
 
     void Update() { 

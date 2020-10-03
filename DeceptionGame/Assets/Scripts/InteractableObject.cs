@@ -14,36 +14,39 @@ public class InteractableObject : MonoBehaviour {
         _collider = GetComponent<SphereCollider>();
     }
 
-    public void TryPickUp() {
+    // Tries to pick up this prop and returns true iff successful
+    public bool TryPickUp() {
         if (_interactable) {
             PickUp();
             OnInteract();
+            return true;
         }
+        return false;
     }
 
     protected virtual void PickUp() {
 
     }
     
-    public void TryRepair() {
+    public void TryRepair(PlayerController player) {
         if (_interactable) {
-            Repair();
+            Repair(player);
             OnInteract();
         }
     }
     
-    protected virtual void Repair() {
+    protected virtual void Repair(PlayerController player) {
 
     }
 
-    public void TrySabotage() {
+    public virtual void TrySabotage(PlayerController player) {
         if (_interactable) {
-            Sabotage();
+            Sabotage(player);
             OnInteract();
         }
     }
 
-    protected virtual void Sabotage() {
+    protected virtual void Sabotage(PlayerController player) {
 
     }
 
@@ -56,15 +59,15 @@ public class InteractableObject : MonoBehaviour {
     }
     
     // Tells nearby players to update their prompts UI
-    private void UpdatePrompts() {
-        Collider[] nearbyPlayers = Physics.OverlapSphere(transform.position, _collider.radius, 1 << LayerMask.NameToLayer("Player"));
+    protected void UpdatePrompts() {
+        Collider[] nearbyPlayers = Physics.OverlapSphere(transform.position + _collider.center, _collider.radius, 1 << LayerMask.NameToLayer("Player"));
         foreach (Collider player in nearbyPlayers) {
             player.GetComponent<PlayerController>().UpdatePrompts();
         }
     }
     
     public void ShowPrompts(bool show) {
-        if (show) {
+        if (show && _interactable) {
             _interactionPrompts.SetActive(true);
         } else {
             _interactionPrompts.SetActive(false);
