@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dedb73ec91ccf845b85d69906f01000, type: 3}
+  m_Name: TrapCard
+  m_EditorClassIdentifier: 
+  cardName: Bear Trap
+  cardDescription: Card text
+  removeFromHandOnPlay: 1
+  prefabObject: {fileID: 5009491042901901628, guid: 8bdeb064c3db27b47971b522d07f249f, type: 3}
+  damage: 1
+  stunDuration: 5
