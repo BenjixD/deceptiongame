@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class PhysicalProp : InteractableObject {
     public Prop prop;
-    private SpriteRenderer _spriteRenderer;
-    [HideInInspector] public Sprite sprite;
+    [SerializeField] private SpriteRenderer _spriteRenderer;
+    public Sprite sprite{get; set;}
+
+    public bool carryPropOnPickup = true; // Do not carry cards
 
     protected override void Start() {
         base.Start();
-        _spriteRenderer = GetComponent<SpriteRenderer>();
         sprite = _spriteRenderer.sprite;
         if (prop != null) {
             SetProp(prop);

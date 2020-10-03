@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class ShowOnlyIfInRange : MonoBehaviour
 {
-    public float showRangeSquared = 100;
-    public bool drawDebugLine = false;
-
     private Transform target;
 
     private Transform[] allChildren;
@@ -17,12 +14,7 @@ public class ShowOnlyIfInRange : MonoBehaviour
     private bool isInvisible = false;
 
 
-    public void Initialize(Transform target) {
-        this.target = target;
-    }
-
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         this.notInRangeLayer = LayerMask.NameToLayer("Invisible");
 
@@ -32,39 +24,68 @@ public class ShowOnlyIfInRange : MonoBehaviour
         }
     }
 
+
+    void Start() {
+
+        if (GameManager.Instance.controller == null) {
+            return;
+        }
+
+        this.target = GameManager.Instance.controller.mainPlayer.transform;
+        if (this.target == null) {
+            Debug.LogError("ERROR: No Main player found!");
+            return;
+        }
+
+        if (GameManager.Instance.controller.fogOfWarGenerator.IsObjectVisible(this.transform.position)) {
+            this.OnGainVision();
+            this.OnVisible();
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
         if (target) {
-            float deltaX = target.transform.position.x - this.transform.position.x;
-            float deltaZ = target.transform.position.z - this.transform.position.z;
-
-            float distSquared = deltaX * deltaX + deltaZ * deltaZ;
-
-            if (drawDebugLine) {
-                Vector3 from = transform.position;
-                Vector3 to = transform.position + Vector3.right * Mathf.Sqrt(showRangeSquared);
-                Debug.DrawLine(from, to, Color.yellow);
-            }
-
-            if (distSquared > this.showRangeSquared) {
-                if (!isInvisible) {
-                    for (int i = 0; i < this.allChildren.Length; i++) {
-                        this.allChildren[i].gameObject.layer = this.notInRangeLayer;
-                    }
-                }
-
-                isInvisible = true;
-            } else if (distSquared <= this.showRangeSquared) {
+            bool withinDistance = GameManager.Instance.controller.fogOfWarGenerator.IsObjectVisible(this.transform.position); // TODO: Should use Bounds instead of just raw position
+            
+            if (withinDistance) {
                 if (isInvisible) {
-                    for (int i = 0; i < this.allChildren.Length; i++) {
-                        this.allChildren[i].gameObject.layer = this.childLayers[i];
-                    }
+                    this.OnGainVision();
                 }
 
                 isInvisible = false;
+                this.OnVisible();
+            } else {
+                if (!isInvisible) {
+                    this.OnLostVision();
+                }
+
+                isInvisible = true;
+                this.OnNoVision();
             }
-        } else {
+
         }
+    }
+
+    // Override me to do cool stuff!
+    protected virtual void OnGainVision() {
+        for (int i = 0; i < this.allChildren.Length; i++) {
+            this.allChildren[i].gameObject.layer = this.childLayers[i];
+        }
+    }
+
+    protected virtual void OnVisible() {
+
+    }
+
+    protected virtual void OnLostVision() {
+        for (int i = 0; i < this.allChildren.Length; i++) {
+            this.allChildren[i].gameObject.layer = this.notInRangeLayer;
+        }
+    }
+
+    protected virtual void OnNoVision() {
+
     }
 }

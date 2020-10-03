@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Interactable
+  - Minimap
+  - OutOfBounds
+  - UICardImage
   layers:
   - Default
   - TransparentFX
@@ -21,7 +24,7 @@ TagManager:
   - FogOfWar
   - Invisible
   - SeeThrough
-  - 
+  - GroundLayer
   - 
   - 
   - 
@@ -47,4 +50,7 @@ TagManager:
     locked: 0
   - name: FogOfWar
     uniqueID: 2142298635
+    locked: 0
+  - name: OverFogOfWar
+    uniqueID: 3854494419
     locked: 0

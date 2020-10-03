@@ -1302,8 +1302,20 @@ PrefabInstance:
       propertyPath: _moveSpeed
       value: 30
       objectReference: {fileID: 0}
+    - target: {fileID: 639585649983949254, guid: 48b7ea380c351804cac00ff10f13d040, type: 3}
+      propertyPath: debug_SpawnOnStart
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1686603809286012411, guid: 48b7ea380c351804cac00ff10f13d040, type: 3}
       propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2532444787988962201, guid: 48b7ea380c351804cac00ff10f13d040, type: 3}
+      propertyPath: initialSkinName
+      value: Black
+      objectReference: {fileID: 0}
+    - target: {fileID: 2532444787988962201, guid: 48b7ea380c351804cac00ff10f13d040, type: 3}
+      propertyPath: _animationName
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3559252945405157142, guid: 48b7ea380c351804cac00ff10f13d040, type: 3}
@@ -1313,6 +1325,14 @@ PrefabInstance:
     - target: {fileID: 4698029242936394000, guid: 48b7ea380c351804cac00ff10f13d040, type: 3}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7515373401849352158, guid: 48b7ea380c351804cac00ff10f13d040, type: 3}
+      propertyPath: debug_InitializeOnStart
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8166154526154710073, guid: 48b7ea380c351804cac00ff10f13d040, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8446441877223717421, guid: 48b7ea380c351804cac00ff10f13d040, type: 3}

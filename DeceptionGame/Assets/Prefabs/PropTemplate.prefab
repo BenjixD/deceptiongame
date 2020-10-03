@@ -99,6 +99,7 @@ GameObject:
   - component: {fileID: 4489643677760689399}
   - component: {fileID: 1457191137593483763}
   - component: {fileID: 5054042329419775879}
+  - component: {fileID: 1729414968}
   m_Layer: 0
   m_Name: PropTemplate
   m_TagString: Interactable
@@ -115,7 +116,7 @@ Transform:
   m_GameObject: {fileID: 4489643677760689397}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7732734839912020585}
   m_Father: {fileID: 0}
@@ -199,7 +200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interactionPrompts: {fileID: 659945411912212049}
   prop: {fileID: 11400000, guid: a12a1fe9815952d4b92f7279c8bee4aa, type: 2}
-  sprite: {fileID: 0}
+  _spriteRenderer: {fileID: 4489643677760689401}
 --- !u!114 &5054042329419775879
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,6 +217,20 @@ MonoBehaviour:
   doOnUpdate: 1
   lookOpposite: 0
   maxSquaredDistance: 1000
+--- !u!114 &1729414968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4489643677760689397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2d4141156927c944b5837715f241522, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  removeFromMinimapOnLostVision: 0
+  minimapSprite: {fileID: 21300000, guid: b890d1f320ad3a1459e2b59199d2d4f8, type: 3}
 --- !u!1001 &148568623288762304
 PrefabInstance:
   m_ObjectHideFlags: 0

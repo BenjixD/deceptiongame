@@ -4,6 +4,8 @@ using UnityEngine;
 using Spine.Unity;
 
 public class AnimationController : MonoBehaviour {
+    public bool debug_InitializeOnStart = false;
+
     private SkeletonAnimation _skeletonAnimation;
     private Spine.AnimationState _animState;
     [SerializeField, SpineAnimation] private string[] _defaultAnims = null;
@@ -15,6 +17,12 @@ public class AnimationController : MonoBehaviour {
     // private float _dieFadeTime = 0.3f;
 
     private void Start() {
+        if (debug_InitializeOnStart) {
+            this.Initialize();
+        }
+    }
+
+    public void Initialize() {
         _skeletonAnimation = GetComponent<SkeletonAnimation>();
         _animState = _skeletonAnimation.state;
         // Store all the names of this skeleton's anims

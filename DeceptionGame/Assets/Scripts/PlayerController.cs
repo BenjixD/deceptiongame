@@ -1,34 +1,52 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+
 
 public class PlayerController : MonoBehaviour {
     [Header("References")]
-    public ShowOnlyIfInRange showIfInRangeScript;
+    public PlayerCardController cardController;
+
+    public Transform throwLocation; // Might want to be its own class later on like in Mooks if we have too many...
+
+    public PlayerStats playerStats;
+
+    [SerializeField] private Rigidbody _rb = null;
     public PlayerHUD playerHUD;
 
     [Header("Controllers")]
     public PlayerMovementController mvController;
     public AnimationController animController;
 
+    public bool debug_SpawnOnStart = false;
+
     private List<InteractableObject> _nearbyInteractables = new List<InteractableObject>();
     private InteractableObject _closestInteractable;
     private PhysicalProp _heldProp = null;
     private bool _animLocked;
+
+
     private void Start() {
-        Spawn();
+        if (debug_SpawnOnStart) {
+            Spawn();
+        }
     }
 
-    public void Initialize(Transform mainPlayerTransform) {
-        if (mainPlayerTransform != null) {
-            // This is NOT the main player
-            showIfInRangeScript.Initialize(mainPlayerTransform);
+
+    public void Initialize() {
+
+        if (GameManager.Instance.controller.mainPlayer != null && this.transform != GameManager.Instance.controller.mainPlayer) {
             // Disable all Controllers
             mvController.enabled = false;
             this.enabled = false; // TODO: Change logic to be more sophisticated
-        } else {
-            
         }
+
+        this.playerStats.Initialize();
+
+        this.cardController.Initialize(this);
+        this.animController.Initialize();
+        this.Spawn();
     }
 
     private void GetControllerComponents() {
@@ -45,13 +63,49 @@ public class PlayerController : MonoBehaviour {
             } else if (Input.GetButtonDown("Sabotage")) {
                 TrySabotage();
             }
-        }
 
+            if (Input.GetKeyDown(KeyCode.Space)) {
+                this.cardController.PlayCardInHand(0);
+            }
+
+
+            // TODO: Find a better place to do this
+            // Drop card
+            if (Input.GetKeyDown(KeyCode.G) && EventSystem.current.IsPointerOverGameObject()) {
+                Debug.Log("Drop card");
+                this.TryDropCard();
+            }
+        }
+        this.playerStats.CheckAilments();
         UpdateAnims();
+
+    }
+
+    private void TryDropCard() {
+
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = Input.mousePosition;
+        List<RaycastResult> raycastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, raycastResults);
+
+        RaycastResult hitResult = raycastResults.Find(raycast => raycast.gameObject.tag == "UICardImage");
+
+        if (hitResult.gameObject != null) {
+            Debug.Log("Hit");
+            UICardImage uiCardImage = hitResult.gameObject.GetComponent<UICardImage>();
+            Card theCardReference = uiCardImage.card;
+            this.cardController.RemoveCardFromHand(theCardReference);
+            CardProp cardProp = Instantiate<CardProp>(GameManager.Instance.models.cardPropPrefab);
+            cardProp.Initialize(theCardReference);
+            cardProp.transform.position = this.transform.position;
+            
+        } else {
+            Debug.Log("Missed");
+        }
     }
 
     public bool IsControllable() {
-        return !_animLocked;
+        return !_animLocked && this.playerStats.CanPlayerMove();
     }
 
     public void UpdateAnims() {
@@ -116,6 +170,8 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+
+
     // Hide the prompts of all nearby objects
     private void HidePrompts() {
         foreach (InteractableObject interactable in _nearbyInteractables) {
@@ -144,7 +200,9 @@ public class PlayerController : MonoBehaviour {
                     animController.EndTrackAnims(track);
                 }
                 StartCoroutine(SetAnimationLock(animController.GetAnimationDuration("pick up")));
-                AcquireProp(prop);
+                if (prop.carryPropOnPickup) {
+                    AcquireProp(prop);
+                }
             }
         }
     }

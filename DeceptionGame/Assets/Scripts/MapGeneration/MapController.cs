@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 // Controller for MapGenerator
 // A few things here can be seperated into their own scripts later
+
+
 public class MapController : MonoBehaviour
 {
     [Header("References")]
@@ -18,68 +21,132 @@ public class MapController : MonoBehaviour
     public GameObject propPrefab;
     public GameObject treePrefab;
 
+    public PingAlertObject pingAlertPrefab;
+
     [Header("Prefab parents")]
 
     public Transform treeParent;
     public Transform propParent; // Might move somewhere else later
 
 
+
+
     [Header("Balance")]
 
     public int numPlayersToSpawn = 4;
 
-    public int treeSparseness = 1;
+    public float treeDensity = 0.5f;
 
 
     [Header("Debug")]
-    public bool testMouse = true;
 
     public float cameraDistance = 10f;
 
     public bool showDebugCubes = false;
     public Transform cubeParent;
 
+    public List<PlayerController> players{get; set;} // TODO: Move this somewhere else...
 
-    private GameObject[,] debugCubes;
+
+    public GameObject[,] debugCubes{get; set;}
 
     private List<List<MapGenerator.Coord>> activeGreenCubes;
 
     private PlayerController mainPlayer;
 
-    void Start() {
-        this.Initialize();
-    }
+    private string lastHitObjectTag = "";
 
     public void Initialize() {
         this.debugCubes = new GameObject[mapGenerator.width, mapGenerator.height];
         this.activeGreenCubes = new List<List<MapGenerator.Coord>>();
+        this.players = new List<PlayerController>();
+
         this.mapGenerator.GenerateMap();
-        this.CreateCubes();
+        this.CreateCubes(); // debug
         this.SpawnTrees();
         this.SpawnPlayers();
         this.SpawnProps();
-        this.minimap.Initialize(this.mapGenerator, this.mainPlayer);
+        this.minimap.Initialize(this, this.mainPlayer);
+        this.fogOfWarGenerator.Initialize(this);
+    }
+
+    public void SetCameraTarget(Vector3 target, Transform parent) {
+        Camera.main.transform.position = new Vector3(target.x, target.y + this.cameraDistance, target.z - this.cameraDistance);
+        Camera.main.transform.LookAt(target);
+        Camera.main.transform.SetParent(parent);
+    }
+
+    // Gets the current map or minimap location based on mouse location
+    public Vector3 GetMapOrMinimapClickLocation(bool allowWalls) {
+
+        RaycastHit hitInfo;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Vector3 errorVector = new Vector3(0, 0, -1);
+
+        if (Physics.Raycast(ray, out hitInfo)) {
+
+            MapTileType[,] map = this.mapGenerator.GetMap();
+
+            Vector3 teleportLocation = Vector3.zero;
+            if (hitInfo.transform.tag == "Minimap") {
+                // Clicked on minimap
+                teleportLocation = this.minimap.MinimapToWorldPos(hitInfo.point);
+
+            } else {
+                teleportLocation = hitInfo.point;
+            }
+
+            MapGenerator.Coord nearestCoord = this.mapGenerator.NearestWorldPointToCoord(teleportLocation);
+            
+            if (nearestCoord.tileX == -1) {
+                return errorVector;
+            }
+
+            if (!allowWalls) {
+                if (map[nearestCoord.tileX, nearestCoord.tileY] == MapTileType.WALL) {
+                    return errorVector;
+                }
+            }
+
+            Vector3 finalTeleportPoint =  this.mapGenerator.CoordToWorldPoint(nearestCoord);
+            return finalTeleportPoint;
+        } else {
+            return errorVector;
+        }
     }
 
 	void Update() {
-        // DEBUG ONLY: Test World to map coord
-		if (Input.GetMouseButton(0) && testMouse) {
+		if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject()) {
             RaycastHit hitInfo;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hitInfo)) {
-                MapGenerator.Coord nearestPoint = mapGenerator.NearestWorldPointToCoord(hitInfo.point);
-                MapTileType tile = mapGenerator.GetMapCoord(nearestPoint);
-
-                if (tile != MapTileType.OUT_OF_BOUNDS) {
-                    this.debugCubes[nearestPoint.tileX, nearestPoint.tileY].GetComponent<MeshRenderer>().material.color = Color.red;
+            
+                if (hitInfo.transform.tag == "Minimap") {
+                    // Minimap click
+                    this.minimap.MoveToMinimapLocation(hitInfo.point);
+                } else {
+                    // Ping
+                    Vector3 coordPosition = mapGenerator.NearestWorldPointToMapTile(hitInfo.point);
+                    if (coordPosition != Vector3.zero) {
+                        PingAlertObject pingAlertObject = Instantiate<PingAlertObject>(pingAlertPrefab, coordPosition, Quaternion.identity);
+                    }
                 }
 
+                this.lastHitObjectTag = hitInfo.transform.tag;
             }
 		}
 
+        if (Input.GetMouseButtonUp(0)) {
+            if (this.lastHitObjectTag == "Minimap") {
+                this.SetCameraTarget(this.mainPlayer.transform.position, this.mainPlayer.transform);
+            }
+            
+            this.lastHitObjectTag = "";
+        }
+
         // DEBUG ONLY: Restart 
         if (Input.GetKeyDown(KeyCode.R)) {
-            this.Initialize();
+            // this.Initialize();
         }
 
         // DEBUG ONLY: Spawn random stuff
@@ -140,7 +207,7 @@ public class MapController : MonoBehaviour
         for (int x = 0; x < this.mapGenerator.width; x++) {
             for (int y = 0; y < this.mapGenerator.height; y ++) {
                 MapGenerator.Coord coord = new MapGenerator.Coord(x, y);
-                if (this.mapGenerator.isOpenEdgeTile(coord) || (map[x,y] == MapTileType.WALL && x % this.treeSparseness == 0 && y % this.treeSparseness == 0)) {
+                if (this.mapGenerator.isOpenEdgeTile(coord) || (map[x,y] == MapTileType.WALL && Random.Range(0.0f, 1.0f) <= this.treeDensity )) {
                         Vector3 spawnLocation = this.mapGenerator.CoordToWorldPoint(coord);
                         GameObject tree = Instantiate(treePrefab, spawnLocation, Quaternion.identity) as GameObject;
                         float randScale = Random.Range(0.5f, 2f);
@@ -160,12 +227,14 @@ public class MapController : MonoBehaviour
             PlayerController player = Instantiate(playerPrefab, spawnLocation, Quaternion.identity) as PlayerController;
             bool isMainPlayer = index == 0;
             if (isMainPlayer) {
-                player.Initialize(null);
+                player.Initialize();
                 this.SetMainPlayer(player);
             } else {
-                player.Initialize(this.mainPlayer.transform);
+                player.Initialize();
                 player.gameObject.name += " " + index;
             }
+            
+            this.players.Add(player);
             index++;
         }
     }
@@ -187,11 +256,10 @@ public class MapController : MonoBehaviour
         this.mainPlayer = player;
         this.mainPlayer.name = "Main player";
         Vector3 playerPos = this.mainPlayer.transform.position;
-        Camera.main.transform.position = new Vector3(playerPos.x, playerPos.y + this.cameraDistance, playerPos.z - this.cameraDistance);
-        Camera.main.transform.LookAt(playerPos);
-        Camera.main.transform.SetParent(player.transform);
+        this.SetCameraTarget(player.transform.position, player.transform);
+
         fogOfWarGenerator.player = player.transform;
-        fogOfWarGenerator.transform.SetParent(player.transform);
-        fogOfWarGenerator.gameObject.transform.position = new Vector3(player.transform.position.x , player.transform.position.y + 100, player.transform.position.z);
+        GameManager.Instance.controller.mainPlayer = this.mainPlayer; // TODO: Organize this
     }
+
 }
