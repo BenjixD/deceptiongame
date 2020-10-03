@@ -200,7 +200,9 @@ public class PlayerController : MonoBehaviour {
                     animController.EndTrackAnims(track);
                 }
                 StartCoroutine(SetAnimationLock(animController.GetAnimationDuration("pick up")));
-                AcquireProp(prop);
+                if (prop.carryPropOnPickup) {
+                    AcquireProp(prop);
+                }
             }
         }
     }
