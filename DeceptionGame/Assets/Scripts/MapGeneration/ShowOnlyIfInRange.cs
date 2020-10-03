@@ -26,6 +26,11 @@ public class ShowOnlyIfInRange : MonoBehaviour
 
 
     void Start() {
+
+        if (GameManager.Instance.controller == null) {
+            return;
+        }
+
         this.target = GameManager.Instance.controller.mainPlayer.transform;
         if (this.target == null) {
             Debug.LogError("ERROR: No Main player found!");

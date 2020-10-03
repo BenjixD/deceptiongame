@@ -9,12 +9,12 @@ public class FakeProp : InteractableObject {
     public void Initialize(TransformCard transformCard) {
         this.transformCardController = transformCard;
     }
-    protected override void PickUp() {
+    protected override void Repair(PlayerController player) {
         // TODO: Might need to change for "Picking up the player"
         this.transformCardController.UnTransform();
     }
     
-    protected override void Sabotage() {
+    protected override void Sabotage(PlayerController player) {
         this.transformCardController.UnTransform();
     }
 }

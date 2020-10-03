@@ -20,7 +20,7 @@ public class CardProp : InteractableObject {
         Destroy(gameObject);
     }
     
-    protected override void Sabotage() {
+    protected override void Repair(PlayerController player) {
         // TODO: leave behind debris
         Debug.Log("Destroyed prop: " + gameObject.name);
         _interactable = false;

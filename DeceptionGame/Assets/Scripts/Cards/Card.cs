@@ -36,15 +36,15 @@ public class Card : ScriptableObject {
 
     protected Vector3 GetDirectionHelper() {
         Vector3 direction = Vector3.zero;
-        PlayerHorizontalDirection horizontalDirection = this.player.GetHorizontalDirection();
-        PlayerVerticalDirection verticalDirection = this.player.GetVerticalDirection();
+        PlayerHorizontalDirection horizontalDirection = this.player.mvController.GetHorizontalDirection();
+        PlayerVerticalDirection verticalDirection = this.player.mvController.GetVerticalDirection();
 
         if (horizontalDirection != PlayerHorizontalDirection.DEFAULT) {
-            direction.x = this.player.GetHorizontalDirection() == PlayerHorizontalDirection.LEFT ? -1 : 1;
+            direction.x = this.player.mvController.GetHorizontalDirection() == PlayerHorizontalDirection.LEFT ? -1 : 1;
         }
 
         if (verticalDirection != PlayerVerticalDirection.DEFAULT) {
-            direction.z = this.player.GetVerticalDirection() == PlayerVerticalDirection.DOWN ? -1 : 1;
+            direction.z = this.player.mvController.GetVerticalDirection() == PlayerVerticalDirection.DOWN ? -1 : 1;
         }
 
         // If neutral, do right
