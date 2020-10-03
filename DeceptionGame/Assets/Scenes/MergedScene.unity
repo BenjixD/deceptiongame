@@ -911,7 +911,7 @@ MonoBehaviour:
   treeParent: {fileID: 817250074}
   propParent: {fileID: 1219074921}
   numPlayersToSpawn: 4
-  treeSparseness: 2
+  treeDensity: 0.1
   cameraDistance: 7
   showDebugCubes: 0
   cubeParent: {fileID: 1910668412}

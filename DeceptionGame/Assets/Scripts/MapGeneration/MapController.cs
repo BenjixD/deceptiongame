@@ -35,7 +35,7 @@ public class MapController : MonoBehaviour
 
     public int numPlayersToSpawn = 4;
 
-    public int treeSparseness = 1;
+    public float treeDensity = 0.5f;
 
 
     [Header("Debug")]
@@ -206,17 +206,13 @@ public class MapController : MonoBehaviour
         MapTileType[,] map = this.mapGenerator.GetMap();
         for (int x = 0; x < this.mapGenerator.width; x++) {
             for (int y = 0; y < this.mapGenerator.height; y ++) {
-                if (map[x,y] == MapTileType.WALL) {
-
-                    if ((x % this.treeSparseness == 0 && y % this.treeSparseness == 0) || (x == 0 || y == 0 || x == this.mapGenerator.width-1 || y == this.mapGenerator.height-1)) {
-                        MapGenerator.Coord coord = new MapGenerator.Coord(x, y);
+                MapGenerator.Coord coord = new MapGenerator.Coord(x, y);
+                if (this.mapGenerator.isOpenEdgeTile(coord) || (map[x,y] == MapTileType.WALL && Random.Range(0.0f, 1.0f) <= this.treeDensity )) {
                         Vector3 spawnLocation = this.mapGenerator.CoordToWorldPoint(coord);
                         GameObject tree = Instantiate(treePrefab, spawnLocation, Quaternion.identity) as GameObject;
                         float randScale = Random.Range(0.5f, 2f);
                         tree.transform.localScale = new Vector3(randScale, randScale, 1);
                         tree.transform.SetParent(this.treeParent);
-                    }
-
                 }
             }
         }
