@@ -146,7 +146,7 @@ public class MapController : MonoBehaviour
 
         // DEBUG ONLY: Restart 
         if (Input.GetKeyDown(KeyCode.R)) {
-            this.Initialize();
+            // this.Initialize();
         }
 
         // DEBUG ONLY: Spawn random stuff

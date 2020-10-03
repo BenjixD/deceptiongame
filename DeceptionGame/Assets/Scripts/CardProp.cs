@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CardProp : InteractableObject {
+public class CardProp : PhysicalProp {
     
     private Card card;
 
@@ -11,7 +11,7 @@ public class CardProp : InteractableObject {
     }
 
     protected override void PickUp() {
-        Debug.Log("Picked up prop: " + gameObject.name);
+        Debug.Log("Picked up card prop: " + gameObject.name);
 
         // For now, just assume it goes to the main player:
         GameManager.Instance.controller.mainPlayer.cardController.AddCardToHand(card);
