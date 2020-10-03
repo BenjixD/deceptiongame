@@ -132,6 +132,13 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    private void OnTriggerEnter(Collider other) {
+        if (other.CompareTag("Interactable")) {
+            _nearbyInteractables.Add(other.GetComponent<InteractableObject>());
+            UpdatePrompts();
+        }
+    }
+
 	private void OnTriggerExit(Collider other) {
 	        if (other.CompareTag("Interactable")) {
 	            InteractableObject interactable = other.GetComponent<InteractableObject>();
