@@ -1,0 +1,209 @@
+
+Deception Game Character.png
+size: 1954,1956
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Black/images/body
+  rotate: false
+  xy: 1322, 765
+  size: 362, 395
+  orig: 362, 395
+  offset: 0, 0
+  index: -1
+Black/images/hand
+  rotate: true
+  xy: 442, 2
+  size: 217, 218
+  orig: 217, 218
+  offset: 0, 0
+  index: -1
+Black/images/head
+  rotate: true
+  xy: 2, 1059
+  size: 472, 421
+  orig: 472, 421
+  offset: 0, 0
+  index: -1
+Blue/images/body
+  rotate: false
+  xy: 1322, 368
+  size: 362, 395
+  orig: 362, 395
+  offset: 0, 0
+  index: -1
+Blue/images/hand
+  rotate: false
+  xy: 1686, 1736
+  size: 217, 218
+  orig: 217, 218
+  offset: 0, 0
+  index: -1
+Blue/images/head
+  rotate: false
+  xy: 425, 1059
+  size: 472, 421
+  orig: 472, 421
+  offset: 0, 0
+  index: -1
+Green/images/body
+  rotate: true
+  xy: 2, 221
+  size: 362, 395
+  orig: 362, 395
+  offset: 0, 0
+  index: -1
+Green/images/hand
+  rotate: false
+  xy: 1686, 1516
+  size: 217, 218
+  orig: 217, 218
+  offset: 0, 0
+  index: -1
+Green/images/head
+  rotate: true
+  xy: 899, 1482
+  size: 472, 421
+  orig: 472, 421
+  offset: 0, 0
+  index: -1
+Orange/images/body
+  rotate: true
+  xy: 1557, 4
+  size: 362, 395
+  orig: 362, 395
+  offset: 0, 0
+  index: -1
+Orange/images/hand
+  rotate: false
+  xy: 1686, 636
+  size: 217, 218
+  orig: 217, 218
+  offset: 0, 0
+  index: -1
+Orange/images/head
+  rotate: false
+  xy: 848, 585
+  size: 472, 421
+  orig: 472, 421
+  offset: 0, 0
+  index: -1
+Pink/images/body
+  rotate: true
+  xy: 399, 221
+  size: 362, 395
+  orig: 362, 395
+  offset: 0, 0
+  index: -1
+Pink/images/hand
+  rotate: false
+  xy: 1686, 1296
+  size: 217, 218
+  orig: 217, 218
+  offset: 0, 0
+  index: -1
+Pink/images/head
+  rotate: true
+  xy: 899, 1008
+  size: 472, 421
+  orig: 472, 421
+  offset: 0, 0
+  index: -1
+Purple/images/body
+  rotate: true
+  xy: 1160, 4
+  size: 362, 395
+  orig: 362, 395
+  offset: 0, 0
+  index: -1
+Purple/images/hand
+  rotate: false
+  xy: 1686, 856
+  size: 217, 218
+  orig: 217, 218
+  offset: 0, 0
+  index: -1
+Purple/images/head
+  rotate: true
+  xy: 425, 585
+  size: 472, 421
+  orig: 472, 421
+  offset: 0, 0
+  index: -1
+Red/images/body
+  rotate: false
+  xy: 1322, 1559
+  size: 362, 395
+  orig: 362, 395
+  offset: 0, 0
+  index: -1
+Red/images/hand
+  rotate: true
+  xy: 2, 2
+  size: 217, 218
+  orig: 217, 218
+  offset: 0, 0
+  index: -1
+Red/images/head
+  rotate: false
+  xy: 2, 1533
+  size: 472, 421
+  orig: 472, 421
+  offset: 0, 0
+  index: -1
+White/images/body
+  rotate: false
+  xy: 796, 188
+  size: 362, 395
+  orig: 362, 395
+  offset: 0, 0
+  index: -1
+White/images/hand
+  rotate: false
+  xy: 1686, 1076
+  size: 217, 218
+  orig: 217, 218
+  offset: 0, 0
+  index: -1
+White/images/head
+  rotate: true
+  xy: 2, 585
+  size: 472, 421
+  orig: 472, 421
+  offset: 0, 0
+  index: -1
+Yellow/images/body
+  rotate: false
+  xy: 1322, 1162
+  size: 362, 395
+  orig: 362, 395
+  offset: 0, 0
+  index: -1
+Yellow/images/hand
+  rotate: true
+  xy: 222, 2
+  size: 217, 218
+  orig: 217, 218
+  offset: 0, 0
+  index: -1
+Yellow/images/head
+  rotate: true
+  xy: 476, 1482
+  size: 472, 421
+  orig: 472, 421
+  offset: 0, 0
+  index: -1
+card
+  rotate: true
+  xy: 662, 2
+  size: 184, 264
+  orig: 184, 264
+  offset: 0, 0
+  index: -1
+cracks
+  rotate: false
+  xy: 1686, 490
+  size: 258, 144
+  orig: 258, 144
+  offset: 0, 0
+  index: -1

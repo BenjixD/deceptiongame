@@ -1,23 +1,23 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
     [Header("References")]
     public ShowOnlyIfInRange showIfInRangeScript;
-
-    [Space]
+    public PlayerHUD playerHUD;
 
     [Header("Controllers")]
     public PlayerMovementController mvController;
+    public AnimationController animController;
 
-    [Space]
-
-    [SerializeField] private float _moveSpeed = 0;
-    private Vector3 _moveDirection = Vector3.zero;
-    // [SerializeField] private float _interactionRadius = 0;
     private List<InteractableObject> _nearbyInteractables = new List<InteractableObject>();
     private InteractableObject _closestInteractable;
+    private PhysicalProp _heldProp = null;
+    private bool _animLocked;
+    private void Start() {
+        Spawn();
+    }
 
     public void Initialize(Transform mainPlayerTransform) {
         if (mainPlayerTransform != null) {
@@ -37,12 +37,44 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void Update() {
-        if (Input.GetButtonDown("PickUp")) {
-            TryPickUpProp();
-        } else if (Input.GetButtonDown("Repair")) {
-            TryRepair();
-        } else if (Input.GetButtonDown("Sabotage")) {
-            TrySabotage();
+        if (IsControllable()) {
+            if (Input.GetButtonDown("PickUp")) {
+                TryPickUpProp();
+            } else if (Input.GetButtonDown("Repair")) {
+                TryRepair();
+            } else if (Input.GetButtonDown("Sabotage")) {
+                TrySabotage();
+            }
+        }
+
+        UpdateAnims();
+    }
+
+    public bool IsControllable() {
+        return !_animLocked;
+    }
+
+    public void UpdateAnims() {
+        if (mvController.moveDirection == Vector3.zero) {
+            // Idle anims
+            if (animController.TrackIsPlayingAnim(0, "walking")) {
+                animController.SetAnimation(0, "idle", true);
+                if (_heldProp == null) {
+                    animController.SetAnimation(1, "layered arm idle", true);
+                } else {
+                    animController.SetAnimation(1, "layered holding idle", true);
+                }
+            }
+        } else {
+            // Walking anims
+            if (animController.TrackIsPlayingAnim(0, "idle")) {
+                animController.SetAnimation(0, "walking", true);
+                if (_heldProp == null) {
+                    animController.SetAnimation(1, "layered arm walking", true);
+                } else {
+                    animController.SetAnimation(1, "layered holding walking", true);
+                }
+            }
         }
     }
 
@@ -53,16 +85,22 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    private void OnTriggerExit(Collider other) {
-        if (other.CompareTag("Interactable")) {
-            InteractableObject interactable = other.GetComponent<InteractableObject>();
-            if (_nearbyInteractables.Contains(interactable)) {
-                HidePrompts();
-                _nearbyInteractables.Remove(interactable);
-                UpdatePrompts();
-            }
-        }
-    }
+	private void OnTriggerExit(Collider other) {
+	        if (other.CompareTag("Interactable")) {
+	            InteractableObject interactable = other.GetComponent<InteractableObject>();
+	            if (_nearbyInteractables.Contains(interactable)) {
+	                HidePrompts();
+	                _nearbyInteractables.Remove(interactable);
+	                UpdatePrompts();
+	            }
+	
+	            // Withdraw from events upon moving out of range
+	            EventManager eventManager = other.GetComponent<EventManager>();
+	            if (eventManager != null) {
+	                TryLeaveEvent(eventManager);
+	            }
+	        }
+	    }
 
     public void UpdatePrompts() {
         HidePrompts();
@@ -98,20 +136,33 @@ public class PlayerController : MonoBehaviour {
     // Tries to pick up closest interactable
     private void TryPickUpProp() {
         if (_closestInteractable != null) {
-            _closestInteractable.GetComponent<InteractableObject>().TryPickUp();
+            PhysicalProp prop = _closestInteractable.GetComponent<PhysicalProp>();
+            if (prop != null && prop.TryPickUp()) {
+                int track = animController.TakeFreeTrack();
+                if (track != -1) {
+                    animController.AddToTrack(track, "pick up", false, 0);
+                    animController.EndTrackAnims(track);
+                }
+                StartCoroutine(SetAnimationLock(animController.GetAnimationDuration("pick up")));
+                AcquireProp(prop);
+            }
         }
     }
     
     private void TryRepair() {
         if (_closestInteractable != null) {
-            _closestInteractable.GetComponent<InteractableObject>().TryRepair();
+            _closestInteractable.GetComponent<InteractableObject>().TryRepair(this);
         }
     }
 
     private void TrySabotage() {
         if (_closestInteractable != null) {
-            _closestInteractable.GetComponent<InteractableObject>().TrySabotage();
+            _closestInteractable.GetComponent<InteractableObject>().TrySabotage(this);
         }
+    }
+
+    private void TryLeaveEvent(EventManager eventManager) {
+        eventManager.TryLeaveEvent(this);
     }
 
     private void UpdateClosestInteractable() {
@@ -134,6 +185,83 @@ public class PlayerController : MonoBehaviour {
                     shortestDistance = currDistance;
                 }
             }
+        }
+    }
+
+    public Prop GetProp() {
+        if (_heldProp == null) {
+            return null;
+        }
+        return _heldProp.prop;
+    }
+
+    public void AcquireProp(PhysicalProp prop) {
+        if (_heldProp != null) {
+            LoseProp();
+        }
+        _heldProp = prop;
+        playerHUD.PickUpProp(prop);
+        animController.SetAnimation(1, "layered holding idle", true);
+    }
+
+    public void TryDropProp() {
+        if (_heldProp != null && IsControllable()) {
+            int track = animController.TakeFreeTrack();
+            if (track != -1) {
+                animController.AddToTrack(track, "drop", false, 0);
+                animController.EndTrackAnims(track);
+            }
+            StartCoroutine(SetAnimationLock(animController.GetAnimationDuration("drop")));
+            LoseProp();
+        }
+    }
+
+    // Sets current prop down at player's location
+    private void LoseProp() {
+        // Drop prop
+        _heldProp.Drop(transform.position);
+        _nearbyInteractables.Remove(_heldProp.GetComponent<InteractableObject>());
+        _heldProp = null;
+
+        // If participating in an event, Withdraw from it
+        EventManager eventManager = GetNearbyEvent();
+        if (eventManager != null) {
+            TryLeaveEvent(eventManager);
+        }
+
+        playerHUD.EmptyProp();
+        animController.SetAnimation(1, "layered arm idle", true);
+    }
+
+    // Tries to return the first nearby event, or null if there isn't one
+    private EventManager GetNearbyEvent() {
+        EventManager eventManager = null;
+        foreach (InteractableObject interactable in _nearbyInteractables) {
+            eventManager = interactable.GetComponent<EventManager>();
+            if (eventManager != null) {
+                return eventManager;
+            }
+        }
+        return null;
+    }
+
+    // Turn on animation lock for specified duration
+    private IEnumerator SetAnimationLock(float duration) {
+        _animLocked = true;
+        yield return new WaitForSeconds(duration);
+        _animLocked = false;
+    }
+
+    // Handles spawning and its animation
+    private void Spawn() {
+        float spawnAnimDuration = animController.GetAnimationDuration("spawn");
+        StartCoroutine(SetAnimationLock(spawnAnimDuration));
+
+        // Play the animation
+        int track = animController.TakeFreeTrack();
+        if (track != -1) {
+            animController.AddToTrack(track, "spawn", false, 0);
+            animController.EndTrackAnims(track);
         }
     }
 }
